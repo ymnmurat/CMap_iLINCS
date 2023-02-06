@@ -544,11 +544,12 @@ upsetlistlegend=function(upsetlist, querylist, enrichrlist,outputlist=NULL,color
   return(gridtable)
 }
 
-
+#Adopted function (reference needed)
 freqfunc2 <- function(x, n=30){
   tail(sort(table( unlist(strsplit(c(na.omit(as.character(unlist(x, use.names=FALSE)))), ";",fixed = T)))), n)
 }
 
+#Adopted function (reference needed)
 strsplit2 <- function(x,
                      split,
                      type = "remove",
@@ -576,7 +577,7 @@ strsplit2 <- function(x,
   return(out)
 }
 
-###pairs with p-val (imported function M.Love)
+###pairs with p-val (imported function (Michael Love)). Online link is needed for reference
 cols_BR = brewer.pal(11, "RdBu")   # goes from red to white to blue
 pal = colorRampPalette(cols_BR)
 cor_colors = data.frame(correlation = seq(-1,1,0.01),
@@ -619,7 +620,7 @@ panel.hist <- function(x, ...)
   rect(breaks[-nB], 0, breaks[-1], y, col="cyan", ...)
 }
 
-# bind Ensembl ID to results and name the columns (imported function M.Love)
+# bind Ensembl ID to results and name the columns (imported function (Michael Love)). Online link is needed for reference
 convertIDs <- function( ids, from, to, db, ifMultiple=c("putNA", "useFirst")) {
   stopifnot( inherits( db, "AnnotationDb" ) )
   ifMultiple <- match.arg( ifMultiple )
