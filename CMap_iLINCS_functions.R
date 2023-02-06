@@ -395,7 +395,6 @@ slicenricher_updown=function(enrichrlist, combscore_cutoff=200, contr1,contr2,cl
           k=paste0('Corplot','_',d)
           corrplots[[k]]<-tmpfig
           dev.off()}
-
     #heatmaps
     if (heatmap_outputs) {
       f2 = colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
