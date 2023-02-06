@@ -1,7 +1,6 @@
-#' Data file compiler for the xls documents you retrieve from CMap
+#' Data analysis workflow functions for the xls/txt documents that are retrieved from CMap/iLINCS/SwissTargetPrediction platforms
 #'
-#' The function allows the compilation of xls files into one
-#' @param ptrn Defaults to _conn_HA1E_, just change it the way you like to do for your own CMap xls files
+#' @param ptrn Defaults to _conn_HA1E_, just change it the way you kept your data, preferably in seperate folder to avoid confusion
 #' @param types Defaults to kd and oe
 #' @keywords mylib
 #' connectivitydatafile_compiler()
