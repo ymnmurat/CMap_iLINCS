@@ -1,6 +1,6 @@
-#' Data analysis workflow functions for the xls/txt documents that are retrieved from CMap/iLINCS/SwissTargetPrediction platforms
-#'
-#' @param ptrn Defaults to _conn_HA1E_, just change it the way you kept your data, preferably in seperate folder to avoid confusion
+#' Data analysis workflow functions for the documents that are retrieved from CMap/iLINCS/SwissTargetPrediction platforms (xls/txt mainly)
+#' February 11, 2023 - Murat Yaman
+#' @param ptrn Defaults to _conn_HA1E_ or iLINCS_complete_HA1E, just change it the way you kept your data, preferably in a similar format and in a seperate folder to avoid confusion
 #' @param types Defaults to kd and oe
 #' @keywords mylib
 #' connectivitydatafile_compiler()
