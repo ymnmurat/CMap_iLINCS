@@ -5,54 +5,54 @@
 #' @keywords mylib
 #' connectivitydatafile_compiler()
 
-##connectivitydatafile_compiler: Compiles gene connectivity data retrieved from CMap.Currently, it works locally and utilizes names of the downloaded files to parse through. 
-##Future formats can include a logical variable whether the data should be accessed locally or from CMap directly. 
+##connectivitydatafile_compiler: Compiles gene connectivity data retrieved from CMap.Currently, it works locally and utilizes names of the downloaded files to parse through.
+##Future formats can include a logical variable whether the data should be accessed locally or from CMap directly.
 ##Accordingly, curl commands can be posted to and retrieved from CMap Clue.
 connectivitydatafile_compiler=function(ptrn=NULL, types=NULL){
   if(is.null(ptrn)){pattern='_conn_HA1E_'
   }else {pattern=ptrn
-  while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt = 'Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
+  while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
 
   if (is.null(types)) {typewise=c('kd','oe')
   }  else {typewise=tolower(types)
-  while (sum(grepl(paste(typewise, collapse = '|'), c('kd','oe','cp','cc'),ignore.case = T))==0) { typewise=tolower(as.character(readline(prompt = 'Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  ')))}
+  while (sum(grepl(paste(typewise, collapse='|'), c('kd','oe','cp','cc'),ignore.case=T))==0) { typewise=tolower(as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  ')))}
   }
-  files=list.files(pattern = pattern)
+  files=list.files(pattern=pattern)
   if (sum(typewise%in%'cp')==0) {for (i in files) {  if (!exists("dataset")){
-    dataset <- read.table(i,header = T,sep = "\t")[,c("Name", "Type","Score")]
-    colnames(dataset)[colnames(dataset)=="Score"] = sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+    dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+    colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
     dataset=dataset[dataset$Type%in%typewise,]
     dataset$Name_type=paste0(dataset$Name,"_",dataset$Type);
     dataset$Name_type=gsub(' ','_',dataset$Name_type)
     dataset$Name=NULL; dataset$Type=NULL
   }
     if (exists("dataset")){
-      temp_dataset <-read.table(i,header = T,sep = "\t")[,c("Name", "Type","Score")]
-      colnames(temp_dataset)[colnames(temp_dataset)=="Score"] = sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+      temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+      colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
       temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Type);
       temp_dataset=temp_dataset[temp_dataset$Type%in%typewise,]
       temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
       temp_dataset$Name=NULL; temp_dataset$Type=NULL
-      dataset<-merge(dataset, temp_dataset, by="Name_type",all= T)
+      dataset=merge(dataset, temp_dataset, by="Name_type",all=T)
       rm(temp_dataset)
     }}} else {for (i in files) {
 
       if (!exists("dataset")){
-        dataset <- read.table(i,header = T,sep = "\t")[,c("Name", "Type","Score",'Description')]
-        colnames(dataset)[colnames(dataset)=="Score"] = sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+        dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score",'Description')]
+        colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
         dataset=dataset[dataset$Type=='cp',]
         dataset$Name_type=paste0(dataset$Name,"_",dataset$Description);
         dataset$Name_type=gsub(' ','_',dataset$Name_type)
         dataset$Name=NULL; dataset$Type=NULL; dataset$Description=NULL
       }
       if (exists("dataset")){
-        temp_dataset <-read.table(i,header = T,sep = "\t")[,c("Name", "Type","Score")]
-        colnames(temp_dataset)[colnames(temp_dataset)=="Score"] = sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+        temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+        colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
         temp_dataset=temp_dataset[temp_dataset$Type=='cp']
         temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Description);
         temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
         temp_dataset$Name=NULL; temp_dataset$Type=NULL;dataset$Desctiption=NULL
-        dataset<-merge(dataset, temp_dataset, by="Name_type",all= T)
+        dataset=merge(dataset, temp_dataset, by="Name_type",all=T)
         rm(temp_dataset)
       }}}
   dataset=dataset[,-2]
@@ -64,49 +64,100 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL){
   return(dataset)
 }
 
-##iLINCS_kd_connectivitydatafile_compiler: Similar to connectivitydatafile_compiler function, and compiles data from iLINCS instead. 
+##iLINCS_kd_connectivitydatafile_compiler: Similar to connectivitydatafile_compiler function, and compiles data from iLINCS instead.
 ##Further developments by online queries are needed. So that, connectivity information would be collected for specified compounds.
 iLINCS_kd_connectivitydatafile_compiler=function(ptrn=NULL){
   if(is.null(ptrn)){pattern='_conn_HA1E_'
   }else {pattern=ptrn
-  while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt = 'Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
-  files=list.files(pattern = pattern)
+  while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
+  files=list.files(pattern=pattern)
   for (i in files) {  if (!exists("dataset")){
-    dataset <- read.table(i,header = T,sep = "\t")[,c("GeneTarget", "Correlation","zScore")]
+    dataset=read.table(i,header=T,sep="\t")[,c("GeneTarget", "Correlation","zScore")]
     dataset[dataset=='+']=1; dataset[dataset=='-']=-1
     dataset$zScore=dataset$zScore*as.numeric(dataset$Correlation)
-    colnames(dataset)[colnames(dataset)=="zScore"] = sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+    colnames(dataset)[colnames(dataset)=="zScore"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
     dataset$Correlation=NULL
   }
     if (exists("dataset")){
-      temp_dataset <-read.table(i,header = T,sep = "\t")[,c("GeneTarget", "Correlation","zScore")]
+      temp_dataset=read.table(i,header=T,sep="\t")[,c("GeneTarget", "Correlation","zScore")]
       temp_dataset[temp_dataset=='+']=1; temp_dataset[temp_dataset=='-']=-1
       temp_dataset$zScore=temp_dataset$zScore*as.numeric(temp_dataset$Correlation)
-      colnames(temp_dataset)[colnames(temp_dataset)=="zScore"] = sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+      colnames(temp_dataset)[colnames(temp_dataset)=="zScore"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
       temp_dataset$Correlation=NULL
-      dataset<-merge(dataset, temp_dataset, by="GeneTarget",all= T)
+      if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+        dataset=merge(dataset, temp_dataset, by="GeneTarget",all=T)
+      }
       rm(temp_dataset)
     }}
-  dataset=dataset[,-2]
-  colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
-  colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
+  # dataset=dataset[,-2]
+  # colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
+  # colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
   dataset=dataset[!duplicated(dataset),]
   rownames(dataset)=dataset$Name
-  # dataset[is.na(dataset)]=0
+  #replace special characters with underscore to avoid further issues
+  colnames(dataset)=gsub(x=colnames(dataset), pattern="[[:punct:]]", replacement="_")
   return(dataset)
 }
 
-#" enrichr_output: Retrieves EnrichR results. It requires a vector of drug list, p-value cut off, name of the database used (kegg="KEGG_2019_Human","GO_Biological_Process_2018" (see EnrichR sources)), 
-##and a specific direction (for the genes either up or down regulated, if inquired). If the direction is not specified, the calculations are done for all the DEGs (up and downregulated ones separately). 
-##The output file contains the lists for the EnrichR results in the specified directions separately. Each list contains three subcategories in data frame format: 
+##iLINCS_kd_connectivitydatafile_compiler: Similar to connectivitydatafile_compiler function, and compiles data from iLINCS instead.
+##Further developments by online queries are needed. So that, connectivity information would be collected for specified compounds.
+iLINCS_DEGdata_compiler=function(ptrn=NULL){
+  if(is.null(ptrn)){pattern='iLINCS_complete_HA1E_'
+  }else {pattern=ptrn
+  while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
+  files=list.files(pattern=pattern)
+  for (i in files) {  if (!exists("dataset")){
+    dataset=read.table(i,header=T,sep="\t")[,c("Name_GeneSymbol", "Value_LogDiffExp","Significance_pvalue")]
+    colnames(dataset)[colnames(dataset)=="Value_LogDiffExp"]=sub(".xls", "_logDE",sub(paste0(".*\\",pattern),"",i));
+    colnames(dataset)[colnames(dataset)=="Significance_pvalue"]=sub(".xls", "_pval",sub(paste0(".*\\",pattern),"",i));
+    colnames(dataset)[colnames(dataset)=='Name_GeneSymbol']='Genes'
+  }
+    if (exists("dataset")){
+      temp_dataset=read.table(i,header=T,sep="\t")[,c("Name_GeneSymbol", "Value_LogDiffExp","Significance_pvalue")]
+      colnames(temp_dataset)[colnames(temp_dataset)=="Value_LogDiffExp"]=sub(".xls", "_logDE",sub(paste0(".*\\",pattern),"",i));
+      colnames(temp_dataset)[colnames(temp_dataset)=="Significance_pvalue"]=sub(".xls", "_pval",sub(paste0(".*\\",pattern),"",i));
+      colnames(temp_dataset)[colnames(temp_dataset)=='Name_GeneSymbol']='Genes'
+      if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+        dataset=merge(dataset, temp_dataset, by="Genes",all=T)
+      }
+      rm(temp_dataset)
+    }}
+  # dataset=dataset[,-2]
+  # colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
+  # colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
+  # dataset=dataset[!duplicated(dataset),]
+  # rownames(dataset)=dataset$Name
+
+  rownames(dataset)=dataset$Genes; dataset$Genes=NULL
+  #replace special characters with underscore to avoid further issues
+  colnames(dataset)=gsub(x=colnames(dataset), pattern="[[:punct:]]", replacement="_")
+  return(dataset)
+}
+
+if (exists('dataset')) {rm(dataset)}
+files=list.files(pattern="iLINCS_complete_HA")
+for (i in files) {
+
+  if (!exists("dataset")){
+
+  }
+  if (exists("dataset")){
+
+  }
+
+}
+
+#" enrichr_output: Retrieves EnrichR results. It requires a vector of drug list, p-value cut off, name of the database used (kegg="KEGG_2019_Human","GO_Biological_Process_2018" (see EnrichR sources)),
+##and a specific direction (for the genes either up or down regulated, if inquired). If the direction is not specified, the calculations are done for all the DEGs (up and downregulated ones separately).
+##The output file contains the lists for the EnrichR results in the specified directions separately. Each list contains three subcategories in data frame format:
 ##(1) List of pathways and associated combination scores, (2) Expanded list that contains the full range of EnrichR results, and (3) List of pathways and associated genes coming from the input gene expression data.
 
-enrichr_output= function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=NULL, cmapranks=F, cmaprank_cutoff){
+enrichr_output=function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=NULL, cmapranks=F, cmaprank_cutoff){
   require(dplyr);require(purrr);require(enrichR)
   result=list()
   if (is.null(direction)) {ds=c('complete','up','down')}
   else {ds=tolower(direction)
-  while (sum(grepl(ds, c('complete','up','down'),ignore.case = T))==0) { ds=tolower(as.character(readline(prompt = 'Please check out misspelling, if any: complete/up/down?')))}
+  while (sum(grepl(ds, c('complete','up','down'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: complete/up/down?')))}
   }
   for (d in ds) {
     if (exists('go_output')) {rm(go_output)}
@@ -115,8 +166,8 @@ enrichr_output= function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=N
     if (!cmapranks) {
       for (drugs in drug_list) {
         if (!exists("go_output")){
-          go_input= dataset[,grepl(drugs, sub('_logDE|_pval','',colnames(dataset)))]
-          go_input= go_input[order(go_input[,2]),]
+          go_input=dataset[,grepl(drugs, sub('_logDE|_pval','',colnames(dataset)))]
+          go_input=go_input[order(go_input[,2]),]
           if (d=='complete') {enriched=enrichr(rownames(go_input[go_input[,2]<pcutoff&abs(go_input[,1])>abs(logDEcutoff),]), dbs)}
           else if (d=='up') {enriched=enrichr(rownames(go_input[go_input[,2]<pcutoff&go_input[,1]>abs(logDEcutoff),]), dbs)}
           else {enriched=enrichr(rownames(go_input[go_input[,2]<pcutoff&go_input[,1]<(-abs(logDEcutoff)),]), dbs)}
@@ -126,10 +177,10 @@ enrichr_output= function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=N
           # rownames(go_output)=go_output$Term; go_output$Term=NULL
           colnames(go_output)=c('Term',drugs)
           colnames(termgenes)=c('Term',drugs)
-          rm( list = Filter( exists, c('go_input','enriched') ) )}
+          rm( list=Filter( exists, c('go_input','enriched') ) )}
         if (exists("go_output")){
-          go_input <-dataset[,grepl(drugs, sub('_logDE|_pval','',colnames(dataset)))]
-          go_input= go_input[order(go_input[,2]),]
+          go_input=dataset[,grepl(drugs, sub('_logDE|_pval','',colnames(dataset)))]
+          go_input=go_input[order(go_input[,2]),]
           if (d=='complete') {enriched=enrichr(rownames(go_input[go_input[,2]<pcutoff&abs(go_input[,1])>abs(logDEcutoff),]), dbs)
           } else if (d=='up') {enriched=enrichr(rownames(go_input[go_input[,2]<pcutoff&go_input[,1]>abs(logDEcutoff),]), dbs)
           } else {enriched=enrichr(rownames(go_input[go_input[,2]<pcutoff&go_input[,1]<(-abs(logDEcutoff)),]), dbs)}
@@ -139,76 +190,76 @@ enrichr_output= function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=N
           # rownames(enriched)=enriched$Term; enriched$Term=NULL
           colnames(enriched_go)=c('Term',drugs)
           colnames(enriched_go_termgenes)=c('Term',drugs)
-          go_output= merge(go_output, enriched_go, by='Term',all= T)
-          termgenes= merge(termgenes, enriched_go_termgenes, by='Term',all= T)
-          rm( list = Filter( exists, c('go_input','enriched_go') ) )}}
+          go_output=merge(go_output, enriched_go, by='Term',all=T)
+          termgenes=merge(termgenes, enriched_go_termgenes, by='Term',all=T)
+          rm( list=Filter( exists, c('go_input','enriched_go') ) )}}
     } else if(cmapranks) {
       for (drugs in drug_list) {
         if (!exists("go_output")){
-          go_input= dataset[,c(1,grep(drugs,colnames(dataset)))]
-          if (d=='complete') {go_input= go_input[grepl('_kd|_oe',go_input[,1]),]
+          go_input=dataset[,c(1,grep(drugs,colnames(dataset)))]
+          if (d=='complete') {go_input=go_input[grepl('_kd|_oe',go_input[,1]),]
           upranks=go_input[abs(go_input[,2])>cmaprank_cutoff,]
-          upranks[order(abs(upranks[,2]),decreasing = T),]
+          upranks[order(abs(upranks[,2]),decreasing=T),]
           enriched=enrichr(gsub('_kd|_oe','',rownames(upranks)), dbs)
-          rm( list = Filter( exists, c('go_input','upranks') ) )}
-          else if (d=='up') {go_input= go_input[grepl('_kd|_oe',go_input[,1]),]
+          rm( list=Filter( exists, c('go_input','upranks') ) )}
+          else if (d=='up') {go_input=go_input[grepl('_kd|_oe',go_input[,1]),]
           upranks1=go_input[go_input[,2]>cmaprank_cutoff,]
           upranks1=upranks1[grepl('_oe',row.names(upranks1)),]
           upranks2=go_input[go_input[,2]<(-cmaprank_cutoff),]
           upranks2=upranks2[grepl('_kd',rownames(upranks2)),]
           upranks=rbind(upranks1,upranks2)
-          upranks=upranks[order(abs(upranks[,2]),decreasing = T),]
+          upranks=upranks[order(abs(upranks[,2]),decreasing=T),]
           enriched=enrichr(gsub('_kd|_oe','',rownames(upranks)), dbs)
-          rm( list = Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
-          else {go_input= go_input[grepl('_kd|_oe',go_input[,1]),]
+          rm( list=Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
+          else {go_input=go_input[grepl('_kd|_oe',go_input[,1]),]
           upranks1=go_input[go_input[,2]>cmaprank_cutoff,]
           upranks1=upranks1[grepl('_kd',row.names(upranks1)),]
           upranks2=go_input[go_input[,2]<(-cmaprank_cutoff),]
           upranks2=upranks2[grepl('_oe',rownames(upranks2)),]
           upranks=rbind(upranks1,upranks2)
-          upranks=upranks[order(abs(upranks[,2]),decreasing = T),]
+          upranks=upranks[order(abs(upranks[,2]),decreasing=T),]
           enriched=enrichr(gsub('_kd|_oe','',rownames(upranks)), dbs)
-          rm( list = Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
+          rm( list=Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
           k[[drugs]]=enriched[[dbs[[1]]]]
           go_output=enriched[[dbs[[1]]]][,c('Term', 'Combined.Score')]
           termgenes=enriched[[dbs[[1]]]][,c('Term', 'Genes')]
           # rownames(go_output)=go_output$Term; go_output$Term=NULL
           colnames(go_output)=c('Term',drugs)
           colnames(termgenes)=c('Term',drugs)
-          rm( list = Filter( exists, c('go_input','enriched') ) )}
+          rm( list=Filter( exists, c('go_input','enriched') ) )}
         if (exists("go_output")){
-          go_input= dataset[,c(1,grep(drugs,colnames(dataset)))]
+          go_input=dataset[,c(1,grep(drugs,colnames(dataset)))]
           if (d=='complete') {upranks=go_input[abs(go_input[,2])>cmaprank_cutoff,]
-          upranks[order(abs(upranks[,2]),decreasing = T),]
+          upranks[order(abs(upranks[,2]),decreasing=T),]
           enriched=enrichr(gsub('_kd|_oe','',rownames(upranks)), dbs)
-          rm( list = Filter( exists, c('go_input','upranks') ) )}
-          else if (d=='up') {go_input= go_input[grepl('_kd|_oe',go_input[,1]),]
+          rm( list=Filter( exists, c('go_input','upranks') ) )}
+          else if (d=='up') {go_input=go_input[grepl('_kd|_oe',go_input[,1]),]
           upranks1=go_input[go_input[,2]>cmaprank_cutoff,]
           upranks1=upranks1[grepl('_oe',row.names(upranks1)),]
           upranks2=go_input[go_input[,2]<(-cmaprank_cutoff),]
           upranks2=upranks2[grepl('_kd',rownames(upranks2)),]
           upranks=rbind(upranks1,upranks2)
-          upranks=upranks[order(abs(upranks[,2]),decreasing = T),]
+          upranks=upranks[order(abs(upranks[,2]),decreasing=T),]
           enriched=enrichr(gsub('_kd|_oe','',rownames(upranks)), dbs)
-          rm( list = Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
-          else {go_input= go_input[grepl('_kd|_oe',go_input[,1]),]
+          rm( list=Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
+          else {go_input=go_input[grepl('_kd|_oe',go_input[,1]),]
           upranks1=go_input[go_input[,2]>cmaprank_cutoff,]
           upranks1=upranks1[grepl('_kd',row.names(upranks1)),]
           upranks2=go_input[go_input[,2]<(-cmaprank_cutoff),]
           upranks2=upranks2[grepl('_oe',rownames(upranks2)),]
           upranks=rbind(upranks1,upranks2)
-          upranks=upranks[order(abs(upranks[,2]),decreasing = T),]
+          upranks=upranks[order(abs(upranks[,2]),decreasing=T),]
           enriched=enrichr(gsub('_kd|_oe','',rownames(upranks)), dbs)
-          rm( list = Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
+          rm( list=Filter( exists, c('go_input','upranks','upranks1','upranks2') ) )}
           k[[drugs]]=enriched[[dbs[[1]]]]
           enriched_go=enriched[[dbs[[1]]]][,c('Term', 'Combined.Score')]
           enriched_go_termgenes=enriched[[dbs[[1]]]][,c('Term', 'Genes')]
           # rownames(enriched)=enriched$Term; enriched$Term=NULL
           colnames(enriched_go)=c('Term',drugs)
           colnames(enriched_go_termgenes)=c('Term',drugs)
-          go_output= merge(go_output, enriched_go, by='Term',all= T)
-          termgenes= merge(termgenes, enriched_go_termgenes, by='Term',all= T)
-          rm( list = Filter( exists, c('go_input','enriched_go') ) )}}
+          go_output=merge(go_output, enriched_go, by='Term',all=T)
+          termgenes=merge(termgenes, enriched_go_termgenes, by='Term',all=T)
+          rm( list=Filter( exists, c('go_input','enriched_go') ) )}}
     }
     go_output=go_output[,-2]
     colnames(go_output)[grepl('\\.y',colnames(go_output))]=gsub('\\.y','',colnames(go_output)[grepl('\\.y',colnames(go_output))])
@@ -228,122 +279,146 @@ enrichr_output= function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=N
       names(result[[d]][[i]])=gsub('\\.','_',names(result[[d]][[i]]))}}
   return(result)}
 
-# enrichrlist=keggtr; direction="all"; combscore_cutoff=200;refcompounds = c("Mestranol","Warfarin");d='complete'
+# enrichrlist=keggtr; direction="all"; combscore_cutoff=200;refcompounds=c("Mestranol","Warfarin");d='complete'
 
-#slicenricher: Slices and collects specified data (based on Combined score cutoff) from the enrichr_output function. 
-##Currently, it only utilizes the EnrichedTermsScores objects from the enrichr_output data. 
-##Specifications rely on the combscore cutoff values for each reference compound one by one (the inquiries can be provided 
-##directly, or the function will continuously prompt to the user to provide compounds, until the user indicates not to. 
-##Main outputfile contains a list for the pathway names passing the threshold and their combination scores for the respective compounds inquired by the user. 
-##Lists are given in separate sections for each direction (up/down/complete)). In addition, the correlation plots (by default 'spearman') and 
+#slicenricher: CMap ranks are default to FALSE, unless users provide a rank list of kd/oe studies from CMap connectivity data. The functions, slices and collects specified data (based on Combined score cutoff) from the enrichr_output function. Accordingly, it retrieves pathway enrichment scores from up or downregulated genes ('complete' option accounts both up and downregulated genes together). Based on the enrichment scores, users can visually inspect pathway enrichment profiles across the treatments either by heatmaps or corplots
+##Currently, it only utilizes the EnrichedTermsScores objects from the enrichr_output data.
+##Specifications rely on the combscore cutoff values for each reference compound. List of the drugs can be fetched into data as a drug_list, or the function prompts users to specify the names of the compounds to be compared.
+##Main outputfile contains a list for the pathway names passing the threshold and their combination scores for the respective compounds inquired by the user.
+##Lists are given in separate sections for each direction (up/down/complete)). In addition, the correlation plots (by default 'spearman') and
 ##heatmaps are produced and saved in the current directory, unless indicated otherwise.
-##Heatmap label aesthetics are also improved to indicate whether the drugs of interest are coagulant in the literature and/or in our in-house phenotypic screenings. 
+##Heatmap label aesthetics are also improved to indicate whether the drugs of interest are coagulant in the literature and/or in our in-house phenotypic screenings.
 ##Pathways onthologies that matches with thrombosis keyword patterns are also manually included. A warning function can be included to change the cutoff value, in case there are not many enriched pathways, hence errors based on non-finite calculations
-slicenricher=function(enrichrlist, direction=NULL, combscore_cutoff=200, refcompounds=NULL, cmapranks=F,cormethod='spearman',enrichmentdb=NULL, cor_outputs=T, heatmap_outputs=T, enrichmentTOOL='EnrichR'){
+##Heatmap files' width, height and resolution parameters can be user specified, as well. For the future updates, the fucntion can be incorporated into a dashboard or a shinyapp to give better control over the aesthetics and dynamic features
+slicenricher=function(enrichrlist, direction=NULL, combscore_cutoff=200, refcompounds=NULL, cmapranks=F,cormethod='spearman',enrichmentdb=NULL, cor_outputs=T, heatmap_outputs=T, enrichmentTOOL='EnrichR', width_heat=18, height_heat=12, res_heat=300){
   require(tidyverse); require(ggplot2); require(ggord);require(ggfortify);
   require(ComplexHeatmap);require(circlize);
-  if (!cmapranks) {drugnames=gsub('\\.','_',gsub('.*_','',gsub('_[^_]*$','',colnames(as.data.frame(enrichrlist[[1]][1])))))
+  tryCatch({if (!cmapranks) {drugnames=gsub('\\.','_',gsub('.*_','',gsub('_[^_]*$','',colnames(as.data.frame(enrichrlist[[1]][1])))))
   } else if (cmapranks) {drugnames=gsub('.*_','',names(enrichrlist[[1]][[1]]))}
   if (is.null(direction)) {ds=c('complete','up','down')}
-    else {ds=tolower(direction)
-    while (sum(grepl(ds, c('complete','up','down'),ignore.case = T))==0) { 
-      ds=tolower(as.character(readline(prompt = 'Please check out misspelling, if any: complete/up/down?')))}
+  else {ds=tolower(direction)
+  while (sum(grepl(ds, c('complete','up','down'),ignore.case=T))==0) {
+    ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: complete/up/down?')))}
   }
   resp='y'
-  while (is.null(refcompounds)) {refcompounds=as.character(readline(prompt = 'Please provide a valid compound name from the list: '))
-    while (sum(grepl(paste(refcompounds,collapse = "|"), drugnames,ignore.case = T))==0) { 
-      refcompounds=as.character(readline(prompt = 'Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
-  resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))
-    while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))}
-  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt = 'Name of the next compound: ')))
-    while (sum(grepl(paste(nextcomp,collapse = "|"), drugnames,ignore.case = T))==0) { nextcomp=as.character(readline(prompt = 'Please recheck the compound name, and provide it once again: '))}
-    refcompounds=append(refcompounds, nextcomp)
-    resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))
-  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))}}
+  while (is.null(refcompounds)) {refcompounds=as.character(readline(prompt='Please provide a valid compound name from the list: '))
+  while (sum(grepl(paste(refcompounds,collapse="|"), drugnames,ignore.case=T))==0) {
+    refcompounds=as.character(readline(prompt='Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}
+  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt='Name of the next compound: ')))
+  while (sum(grepl(paste(nextcomp,collapse="|"), drugnames,ignore.case=T))==0) { nextcomp=as.character(readline(prompt='Please recheck the compound name, and provide it once again: '))}
+  refcompounds=append(refcompounds, nextcomp)
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}}
   }
 
-  if (is.null(enrichmentdb)) {enrichmentdb=as.character(readline(prompt = 'Name of the gene enrichment database: '))
-    while (length(enrichmentdb)==0) { enrichmentdb=as.character(readline(prompt = 'Please provide the name of the gene enrichment database that you have used: '))}
+  if (is.null(enrichmentdb)) {enrichmentdb=as.character(readline(prompt='Name of the gene enrichment database (KEGG/GO/REACT etc.): '))
+  while (length(enrichmentdb)==0) { enrichmentdb=as.character(readline(prompt='Please provide the name of the gene enrichment database (KEGG/GO/REACT etc) that you have used: '))}
   }
-  proco=c("heparin","thrombin",'phylloquinone', 'menadione')
+  proco=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
   antico_thr=c('Warfarin','APIXABAN','Dabigatran', 'argatroban', 'skatole', 'phenindione')
-  proco_thr=c("heparin","thrombin",'phylloquinone', 'menadione')
+  proco_thr=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
   bloods=c('blood', 'thromb', 'agula', 'erythroc', 'leukoc', 'arteri','vein ', 'vascular')
 
   result=list()
   corrplots=list()
   heatmaps=list()
   for(d in ds){tmp=as.data.frame(enrichrlist[names(enrichrlist)%in%d][[1]][1])
-    colnames(tmp)=gsub(paste0(names(enrichrlist[names(enrichrlist)%in%d][[1]][1]),'.'),'',colnames(tmp))
-    rownames(tmp)=tmp$Term;
-    ind=which(grepl(paste(refcompounds,collapse = "|"), colnames(tmp),ignore.case = T))
-    pathways=vector()
-    for (i in ind) {pathways= unique(append(pathways,rownames(tmp[which(tmp[,i]>combscore_cutoff),])))}
-      tmp=tmp[rownames(tmp)%in%pathways,]
-      tmp[,-1]=log2(tmp[,-1]) #Log scale the combination scores
-      tmp[tmp<0]=0
-      result[[d]]=tmp
-      tmp=tmp[,-1]
-      tmp=tmp[,colSums(tmp)>0]
-       if (length(tmp)>0) {
+  colnames(tmp)=gsub(paste0(names(enrichrlist[names(enrichrlist)%in%d][[1]][1]),'.'),'',colnames(tmp))
+  rownames(tmp)=tmp$Term;
+  ind=which(grepl(paste(refcompounds,collapse="|"), colnames(tmp),ignore.case=T))
+  pathways=vector()
+  for (i in ind) {pathways=unique(append(pathways,rownames(tmp[which(tmp[,i]>combscore_cutoff),])))}
+  tmp=tmp[rownames(tmp)%in%pathways,]
+  tmp[,-1]=log2(tmp[,-1]) #Log scale the combination scores
+  tmp[tmp<0]=0
+  result[[d]]=tmp
+  tmp$Term=NULL
+  tmp=tmp[,colSums(tmp)>0]
+  if (length(tmp)>0) {
 
     #corplot
-        cormat_go<-signif(cor(tmp,method = cormethod),2)
-        cols <- rep('black', ncol(tmp))
-        cols[grepl(paste(proco, collapse = '|'), colnames(tmp),ignore.case = T)]= 'red4'
-        cols[grepl(paste(antico_thr, collapse = '|'), colnames(tmp),ignore.case = T)]='dimgray'
-        cols[grepl(paste(proco_thr, collapse = '|'), colnames(tmp),ignore.case = T)]='red'
-        col_paths=rep('black',nrow(tmp))
-        col_paths[grepl(paste(bloods, collapse = '|'), rownames(tmp),ignore.case = T)]= 'blue'
-          if (cor_outputs) {
-            par(cex.main=1)
-            lgd_list=Legend(labels = c("Pro-coagulants", "Anti-coagulants", 'iLINCS: Pro-coagulants','iLINCS: Anti-coagulants'), title = "Compound types", type = "points", pch = 18, legend_gp = gpar(col = c("red4","black",'red', 'dimgray'), fontsize=24))
-            f1 = colorRamp2(seq(-abs(max(cormat_go)), abs(max(cormat_go)), length = 3), c("#3f7fff", "#EEEEEE", "red"))
-            jpeg(paste0(deparse(substitute(enrichrlist)),'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substring(paste(refcompounds,collapse = '-'),1,15),toupper(cormethod),'corplot_',toupper(d),".jpeg"), units="in", width=18, height=12, res=300)
-            ht1=Heatmap(cormat_go,clustering_method_rows = "ward.D",clustering_method_columns  = "ward.D", col = f1, name= "Pathway combination score correlations (iLINCS - EnrichR)", row_names_gp = gpar(fontsize = 8, fontface = "bold", col=cols),column_names_gp = gpar(fontsize = 8, fontface = "bold", col=cols),
-                        heatmap_legend_param=list(legend_direction="horizontal", title_position= "topcenter", grid_height = unit(0.6, "cm"),legend_width = unit(8, "cm"),labels_gp = gpar(fontsize = 10),title_gp = gpar(fontsize = 10, fontface = "bold")),
-                        cell_fun = function(j, i, x, y, w, h, col) { # add text to each grid
-                          grid.text(cormat_go[i, j], x, y,gp = gpar(fontsize=4.5, fontface='bold'))})
-            tmpfig= draw(ht1, heatmap_legend_side = "bottom", column_title= paste0("Corplot - ",d,'\n',cormethod," correlations on iLINCS pathways \n (EnrichR ",paste(refcompounds,collapse = '-'), " Combination Scores >", combscore_cutoff,", n=", nrow(tmp),")"), column_title_gp=gpar(fontface="bold", line = 5), annotation_legend_list = lgd_list,annotation_legend_side = "right")
-            k=paste0('Corplot','_',d)
-            corrplots[[k]]<-tmpfig
-            dev.off()}
+    cormat_go=signif(cor(tmp,method=cormethod),2)
+    cols=rep('black', ncol(tmp))
+    cols[grepl(paste(proco, collapse='|'), colnames(tmp),ignore.case=T)]='red4'
+      cols[grepl(paste(antico_thr, collapse='|'), colnames(tmp),ignore.case=T)]='dimgray'
+        cols[grepl(paste(proco_thr, collapse='|'), colnames(tmp),ignore.case=T)]='red'
+          col_paths=rep('black',nrow(tmp))
+          col_paths[grepl(paste(bloods, collapse='|'), rownames(tmp),ignore.case=T)]='blue'
+            if (cor_outputs) {
+              par(cex.main=1)
+              lgd_list=Legend(labels=c("Pro-coagulants", "Anti-coagulants", 'iLINCS: Pro-coagulants','iLINCS: Anti-coagulants'), title="Compound types", type="points", pch=18, legend_gp=gpar(col=c("red4","black",'red', 'dimgray'), fontsize=24))
+              f1=colorRamp2(seq(-abs(max(cormat_go)), abs(max(cormat_go)), length=3), c("#3f7fff", "#EEEEEE", "red"))
+              jpeg(paste0(deparse(substitute(enrichrlist)),'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substring(paste(refcompounds,collapse='-'),1,15),toupper(cormethod),'corplot_',toupper(d),".jpeg"), units="in", width=18, height=12, res=300)
+              ht1=Heatmap(cormat_go,clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f1, name="Pathway combination score correlations (iLINCS - EnrichR)", row_names_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold", col=cols),column_names_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold", col=cols),
+                          heatmap_legend_param=list(legend_direction="horizontal", title_position="topcenter", grid_height=unit(0.6, "cm"),legend_width=unit(8, "cm"),labels_gp=gpar(fontsize=nrow(cormat_go)*2),title_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold")),
+                          cell_fun=function(j, i, x, y, w, h, col) { # add text to each grid
+                            grid.text(cormat_go[i, j], x, y,gp=gpar(fontsize=nrow(cormat_go)*2, fontface='bold'))})
+              tmpfig=draw(ht1, heatmap_legend_side="bottom", column_title=paste0("Corplot - ",d,'\n',cormethod," correlations on iLINCS pathways \n (EnrichR ",paste(refcompounds,collapse='-'), "\n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), column_title_gp=gpar(fontface="bold", line=5), annotation_legend_list=lgd_list,annotation_legend_side="right")
+              k=paste0('Corplot','_',d)
+              corrplots[[k]]=tmpfig
+              dev.off()}
 
-    #heatmaps
-    if (heatmap_outputs) {
-      f2 = colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
-      jpeg(paste0(deparse(substitute(enrichrlist)),'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substring(paste(refcompounds,collapse = '-'),1,15),"_Heatmap_",toupper(d),".jpeg"), units="in", width=18, height=12, res=300)
+          #heatmaps
+          if (heatmap_outputs) {
+            f2=colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
+            jpeg(paste0(deparse(substitute(enrichrlist)),'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substring(paste(refcompounds,collapse='-'),1,15),"_Heatmap_",toupper(d),".jpeg"), units="in", width=width_heat, height=height_heat, res=res_heat)
 
-      ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows = "ward.D",clustering_method_columns  = "ward.D", col = f2, name = paste0(toupper(d), " - Pathway combinations scores (EnrichR ",paste(refcompounds,collapse = '-'), " Combination Scores >", combscore_cutoff,", n=", nrow(tmp),")"), row_names_gp = gpar(fontsize = 10-nrow(tmp)*0.05, fontface = "bold", col=col_paths),column_names_gp = gpar(fontsize = 12, fontface = "bold",col=cols),
-                  heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height = unit(0.8, "cm"),legend_width = unit(10, "cm"),labels_gp = gpar(fontsize = 12),title_gp = gpar(fontsize = 18, fontface = "bold"),title_position = "topcenter"),use_raster = F)
-      tmpheat=draw(ht2, heatmap_legend_side = "top",  column_title_gp=gpar(fontface="bold", line = 5),annotation_legend_list = lgd_list,annotation_legend_side = "bottom")
-      k=paste0('Heatmap','_',d)
-      heatmaps[[k]]<-tmpheat
-      dev.off()
-      rm(ind); rm(pathways); rm(tmp)
-    }}}
+            ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(toupper(d), " - Pathway combinations scores \n","(EnrichR ",paste(refcompounds,collapse='-'), "\n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), row_names_gp=gpar(fontsize=10-nrow(tmp)*0.05, fontface="bold", col=col_paths),column_names_gp=gpar(fontsize=12, fontface="bold",col=cols),
+                        heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height=unit(0.8, "cm"),legend_width=unit(10, "cm"),labels_gp=gpar(fontsize=12),title_gp=gpar(fontsize=18, fontface="bold"),title_position="topcenter"),use_raster=F)
+            tmpheat=draw(ht2, heatmap_legend_side="top",  column_title_gp=gpar(fontface="bold", line=5),annotation_legend_list=lgd_list,annotation_legend_side="bottom")
+            k=paste0('Heatmap','_',d)
+            heatmaps[[k]]=tmpheat
+            dev.off()
+            rm(ind); rm(pathways); rm(tmp)
+          }}}
   rm(drugnames)
-  return(result)
+  return(result)},error=function(e){print('Warning: Combination score cut-off might be too stringent for some of the compounds. Please, check the outputs or you can also try lower combination score thresholds')})
 }
 
-#slicenricher_updown: Similar to slicenricher. It allows comparing different groups of drugs (pro-coagulants vs anti-coagulants) to see whether there are any pathways that move in different directions
-slicenricher_updown=function(enrichrlist, combscore_cutoff=200, contr1,contr2,classContr1=NULL,classContr2=NULL,cmapranks=F,cormethod='spearman',enrichmentdb=NULL, cor_outputs=T, heatmap_outputs=T, enrichmentTOOL, repositoryName=NULL){
+#slicenricher_updown: Similar to slicenricher. It allows comparing different groups of drugs (pro-coagulants vs anti-coagulants) to see whether there are any pathways that move in same/opposite directions.
+slicenricher_updown=function(enrichrlist, combscore_cutoff=200, contr1=NULL,contr2=NULL,classContr1=NULL,classContr2=NULL,cmapranks=F,cormethod='spearman',enrichmentdb=NULL, cor_outputs=T, heatmap_outputs=T, enrichmentTOOL='EnrichR', repositoryName=NULL, noContrastwarning=T){
   require(tidyverse); require(ggplot2); require(ggord);require(ggfortify);
   require(ComplexHeatmap);require(circlize);
-  if (!cmapranks) {drugnames=gsub('\\.','_',gsub('.*_','',gsub('_[^_]*$','',colnames(as.data.frame(enrichrlist[[1]][1])))))
+  tryCatch({if (!cmapranks) {drugnames=gsub('\\.','_',gsub('.*_','',gsub('_[^_]*$','',colnames(as.data.frame(enrichrlist[[1]][1])))))
   } else if (cmapranks) {drugnames=gsub('.*_','',names(enrichrlist[[1]][[1]]))}
-  if (is.null(enrichmentdb)) {enrichmentdb=as.character(readline(prompt = 'Name of the gene enrichment database: '))
-    while (length(enrichmentdb)==0) { enrichmentdb=as.character(readline(prompt = 'Please provide the name of the gene enrichment database that you have used: '))}
+  if (is.null(enrichmentdb)) {enrichmentdb=as.character(readline(prompt='Name of the gene enrichment database (KEGG/GO/REACT): '))
+  while (length(enrichmentdb)==0) { enrichmentdb=as.character(readline(prompt='Please provide the name of the gene enrichment database that you have used (KEGG/GO/REACT etc): '))}
   }
-  if (is.null(classContr1)) {classContr1=as.character(readline(prompt = 'What is the class of the first contrasts (Pro-agulant / Anti-coagulant etc): '))
-    while (length(classContr1)==0) { classContr1=as.character(readline(prompt = 'What is the class of the first contrasts (Pro-agulant / Anti-coagulant etc): '))}}
-  if (is.null(classContr2)) {classContr2=as.character(readline(prompt = 'What is the class of the second contrasts (Pro-agulant / Anti-coagulant etc): '))
-    while (length(classContr2)==0) { classContr2=as.character(readline(prompt = 'What is the class of the second contrasts (Pro-agulant / Anti-coagulant etc): '))}}
-  if (is.null(repositoryName)) {repositoryName=as.character(readline(prompt = 'What is the source of the data (CMap, iLINCS etc): '))
-    while (length(repositoryName)==0) { repositoryName=as.character(readline(prompt = 'What is the source of the data (CMap, iLINCS etc): '))}}
-  proco=c("heparin","thrombin",'phylloquinone', 'menadione')
+  resp='y'
+  while (is.null(contr1)) {contr1=as.character(readline(prompt='Please provide a valid compound name from the list to contrast for: '))
+  while (sum(grepl(paste(contr1,collapse="|"), drugnames,ignore.case=T))==0) {
+    contr1=as.character(readline(prompt='Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds for the same direction: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds for the same direction: yes (Y) / no (N)   ')))}
+  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt='Name of the next compound: ')))
+  while (sum(grepl(paste(nextcomp,collapse="|"), drugnames,ignore.case=T))==0) { nextcomp=as.character(readline(prompt='Please recheck the compound name, and provide it once again: '))}
+  contr1=append(contr1, nextcomp)
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds from the same direction: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds from the same direction: yes (Y) / no (N)   ')))}}
+  }
+  while (is.null(contr2)) {contr2=as.character(readline(prompt='Please provide a valid compound name from the list to contrast against the first compound(s): '))
+  while (sum(grepl(paste(contr2,collapse="|"), drugnames,ignore.case=T))==0) {
+    contr2=as.character(readline(prompt='Please recheck the compound names, and provide the name of the second compound \n Do not worry about capital letters, time/conc of exposures: '))}
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}
+  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt='Name of the next compound: ')))
+  while (sum(grepl(paste(nextcomp,collapse="|"), drugnames,ignore.case=T))==0) { nextcomp=as.character(readline(prompt='Please recheck the compound name, and provide it once again: '))}
+  contr2=append(contr2, nextcomp)
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds from the same direction: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds from the same direction: yes (Y) / no (N)   ')))}}
+  }
+  if (is.null(classContr1)) {classContr1=as.character(readline(prompt='What is the class of the first contrasts (Pro-coagulant / Anti-coagulant etc): '))
+  while (length(classContr1)==0) { classContr1=as.character(readline(prompt='What is the class of the first contrasts (Pro-coagulant / Anti-coagulant etc): '))}}
+  if (is.null(classContr2)) {classContr2=as.character(readline(prompt='What is the class of the second contrasts (Pro-coagulant / Anti-coagulant etc): '))
+  while (length(classContr2)==0) { classContr2=as.character(readline(prompt='What is the class of the second contrasts (Pro-coagulant / Anti-coagulant etc): '))}}
+  if (is.null(repositoryName)) {repositoryName=as.character(readline(prompt='What is the source of the data (CMap, iLINCS etc): '))
+  while (length(repositoryName)==0) { repositoryName=as.character(readline(prompt='What is the source of the data (CMap, iLINCS etc): '))}}
+
+  proco=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
   antico_thr=c('Warfarin','APIXABAN','Dabigatran', 'argatroban', 'skatole', 'phenindione')
-  proco_thr=c("heparin","thrombin",'phylloquinone', 'menadione')
+  proco_thr=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
   bloods=c('blood', 'thromb', 'agula', 'erythroc', 'leukoc', 'arteri','vein ', 'vascular')
 
   ds=list(c('up','down'),c('down','up'))
@@ -351,64 +426,67 @@ slicenricher_updown=function(enrichrlist, combscore_cutoff=200, contr1,contr2,cl
   corrplots=list()
   heatmaps=list()
   for(d in 1:length(ds)){tmp1=as.data.frame(enrichrlist[names(enrichrlist)%in%ds[[d]][1]][[1]][1])
-    colnames(tmp1)=paste0(gsub(paste0(names(enrichrlist[names(enrichrlist)%in%ds[[d]][1]][[1]][1]),'.'),'',colnames(tmp1)),'_',ds[[d]][1])
-    colnames(tmp1)[1]='Term'
-    rownames(tmp1)=tmp1$Term;
-    tmp1=tmp1[,grepl(paste(c('Term',contr1),collapse = '|'),colnames(tmp1))]
-    tmp2=as.data.frame(enrichrlist[names(enrichrlist)%in%ds[[d]][2]][[1]][1])
-    colnames(tmp2)=paste0(gsub(paste0(names(enrichrlist[names(enrichrlist)%in%ds[[d]][2]][[1]][1]),'.'),'',colnames(tmp2)),'_',ds[[d]][2])
-    colnames(tmp2)[1]='Term'
-    rownames(tmp2)=tmp2$Term;
-    tmp2=tmp2[,grepl(paste(c('Term',contr2),collapse = '|'),colnames(tmp2))]
-    tmp=merge(tmp1,tmp2,by='Term',all = T)
-    rownames(tmp)=tmp$Term
-    ind=which(grepl(paste(c(contr1,contr2),collapse = "|"), colnames(tmp),ignore.case = T))
-    pathways=vector()
-    for (i in ind) {pathways= unique(append(pathways,rownames(tmp[which(tmp[,i]>combscore_cutoff),])))}
-      tmp=tmp[rownames(tmp)%in%pathways,]
-      tmp[,-1]=log2(tmp[,-1]) #Log scale the combination scores
-      tmp[tmp<0]=0
-      result[[paste(c(ds[[d]][1],ds[[d]][2]),collapse = '_')]]=tmp
-      tmp=tmp[,-1]
-      tmp=tmp[,colSums(tmp)>0]
-      if (length(tmp)>0) {
+  colnames(tmp1)=paste0(gsub(paste0(names(enrichrlist[names(enrichrlist)%in%ds[[d]][1]][[1]][1]),'.'),'',colnames(tmp1)),'_',ds[[d]][1])
+  colnames(tmp1)[1]='Term'
+  rownames(tmp1)=tmp1$Term;
+  tmp1=tmp1[,grepl(paste(c('Term',contr1),collapse='|'),colnames(tmp1),ignore.case = T)]
+  tmp2=as.data.frame(enrichrlist[names(enrichrlist)%in%ds[[d]][2]][[1]][1])
+  colnames(tmp2)=paste0(gsub(paste0(names(enrichrlist[names(enrichrlist)%in%ds[[d]][2]][[1]][1]),'.'),'',colnames(tmp2)),'_',ds[[d]][2])
+  colnames(tmp2)[1]='Term'
+  rownames(tmp2)=tmp2$Term;
+  tmp2=tmp2[,grepl(paste(c('Term',contr2),collapse='|'),colnames(tmp2),ignore.case = T)]
+  tmp=merge(tmp1,tmp2,by='Term',all=T)
+  rownames(tmp)=tmp$Term
+  #prevent any possible issues with generated NAs from the merges; and capping the minimum value to 1 (hence log2(1)=0 in the follow up representations)
+  tmp[is.na(tmp)]=1
+  tmp[tmp<1]=1
+  ind=which(grepl(paste(c(contr1,contr2),collapse="|"), colnames(tmp),ignore.case=T))
+  pathways=vector()
+  for (i in ind) {pathways=unique(append(pathways,rownames(tmp[which(tmp[,i]>combscore_cutoff),])))}
+  tmp=tmp[rownames(tmp)%in%pathways,]
+  tmp[,-1]=log2(tmp[,-1]) #Log scale the combination scores
+  # tmp[tmp<0]=0
+  result[[paste(c(ds[[d]][1],ds[[d]][2]),collapse='_')]]=tmp
+  tmp$Term=NULL
+  tmp=tmp[,colSums(tmp)>0]
+  if (length(tmp)>0) {
 
     #corplot
-        cormat_go<-signif(cor(tmp,method = cormethod),2)
-        cols <- rep('black', ncol(tmp))
-        cols[grepl(pattern = paste0(proco, collapse = '|'), x= colnames(tmp),ignore.case = T)]= 'red4'
-        cols[grepl(pattern = paste0(antico_thr, collapse = '|'), x=colnames(tmp),ignore.case = T)]='dimgray'
-        cols[grepl(pattern = paste0(proco_thr, collapse = '|'), x = colnames(tmp),ignore.case = T)]='red'
-        col_paths=rep('black',nrow(tmp))
-        col_paths[grepl(pattern = paste0(bloods, collapse = '|'), x = rownames(tmp),ignore.case = T)]= 'blue'
-        if (cor_outputs) {
-          par(cex.main=1)
-          lgd_list=Legend(labels = c("Pro-coagulants", "Anti-coagulants", 'iLINCS: Pro-coagulants','iLINCS: Anti-coagulants'), title = "Compound types", type = "points", pch = 18, legend_gp = gpar(col = c("red4","black",'red', 'dimgray'), fontsize=24))
-          f1 = colorRamp2(seq(-abs(max(cormat_go)), abs(max(cormat_go)), length = 3), c("#3f7fff", "#EEEEEE", "red"))
-          jpeg(paste0(deparse(substitute(enrichrlist)),'_',paste(c(repositoryName,enrichmentdb,enrichmentTOOL),collapse = '-'),'_',substr(paste(c(contr1,contr2),collapse = '-'),1,30),'_',toupper(cormethod),'corplot_',toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse = '_')),".jpeg"), units="in", width=18, height=12, res=300)
-          ht1=Heatmap(cormat_go,clustering_method_rows = "ward.D",clustering_method_columns  = "ward.D", col = f1, name= paste0("Pathway combination score correlations (",repositoryName," - ", enrichmentTOOL,")"), row_names_gp = gpar(fontsize = 8, fontface = "bold", col=cols),column_names_gp = gpar(fontsize = 8, fontface = "bold", col=cols),
-                      heatmap_legend_param=list(legend_direction="horizontal", title_position= "topcenter", grid_height = unit(0.6, "cm"),legend_width = unit(8, "cm"),labels_gp = gpar(fontsize = 10),title_gp = gpar(fontsize = 10, fontface = "bold")),
-                      cell_fun = function(j, i, x, y, w, h, col) { # add text to each grid
-                        grid.text(cormat_go[i, j], x, y,gp = gpar(fontsize=4.5, fontface='bold'))})
-          tmpfig= draw(ht1, heatmap_legend_side = "bottom", column_title= paste0("Corplot - ",toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse = 'vs')),'\n',cormethod," correlations on ",repositoryName,'-',enrichmentdb," pathways \n (", enrichmentTOOL," ",substr(paste(c(contr1,contr2),collapse = '-'),1,30), " Combination Scores >", combscore_cutoff,", n=", nrow(tmp),")"), column_title_gp=gpar(fontface="bold", line = 5), annotation_legend_list = lgd_list,annotation_legend_side = "right")
-          k=paste0('Corplot','_',d)
-          corrplots[[k]]<-tmpfig
-          dev.off()}
-    #heatmaps
-    if (heatmap_outputs) {
-      f2 = colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
-      jpeg(paste0(deparse(substitute(enrichrlist)),'_',repositoryName,'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substr(paste(c(contr1,contr2),collapse = '-'),1,30),'____Heatmap_',toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse = '_')),".jpeg"), units="in", width=18, height=12, res=300)
+    cormat_go=signif(cor(tmp,method=cormethod),2)
+    cols=rep('black', ncol(tmp))
+    cols[grepl(pattern=paste0(proco, collapse='|'), x=colnames(tmp),ignore.case=T)]='red4'
+      cols[grepl(pattern=paste0(antico_thr, collapse='|'), x=colnames(tmp),ignore.case=T)]='dimgray'
+        cols[grepl(pattern=paste0(proco_thr, collapse='|'), x=colnames(tmp),ignore.case=T)]='red'
+          col_paths=rep('black',nrow(tmp))
+          col_paths[grepl(pattern=paste0(bloods, collapse='|'), x=rownames(tmp),ignore.case=T)]='blue'
+            if (cor_outputs) {
+              par(cex.main=1)
+              lgd_list=Legend(labels=c("Pro-coagulants", "Anti-coagulants", 'iLINCS: Pro-coagulants','iLINCS: Anti-coagulants'), title="Compound types", type="points", pch=18, legend_gp=gpar(col=c("red4","black",'red', 'dimgray'), fontsize=24))
+              f1=colorRamp2(seq(-abs(max(cormat_go)), abs(max(cormat_go)), length=3), c("#3f7fff", "#EEEEEE", "red"))
+              jpeg(paste0(deparse(substitute(enrichrlist)),'_',paste(c(repositoryName,enrichmentdb,enrichmentTOOL),collapse='-'),'_',substr(paste(c(contr1,contr2),collapse='-'),1,30),'_',toupper(cormethod),'corplot_',toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='_')),".jpeg"), units="in", width=18, height=12, res=300)
+              ht1=Heatmap(cormat_go,clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f1, name=paste0("Pathway combination score correlations (",repositoryName," - ", enrichmentTOOL,")"), row_names_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold", col=cols),column_names_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold", col=cols),
+                          heatmap_legend_param=list(legend_direction="horizontal", title_position="topcenter", grid_height=unit(0.6, "cm"),legend_width=unit(nrow(cormat_go), "cm"),labels_gp=gpar(fontsize=nrow(cormat_go)*2),title_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold")),
+                          cell_fun=function(j, i, x, y, w, h, col) { # add text to each grid
+                            grid.text(cormat_go[i, j], x, y,gp=gpar(fontsize=nrow(cormat_go)*2, fontface='bold'))})
+              tmpfig=draw(ht1, heatmap_legend_side="bottom", column_title=paste0("Corplot - ",toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='vs')),'\n',cormethod," correlations on ",repositoryName,'-',enrichmentdb," pathways \n (", enrichmentTOOL," ",substr(paste(c(contr1,contr2),collapse='-'),1,30), "\n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), column_title_gp=gpar(fontface="bold", line=5), annotation_legend_list=lgd_list,annotation_legend_side="right")
+              k=paste0('Corplot','_',d)
+              corrplots[[k]]=tmpfig
+              dev.off()}
+          #heatmaps
+          if (heatmap_outputs) {
+            f2=colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
+            jpeg(paste0(deparse(substitute(enrichrlist)),'_',repositoryName,'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substr(paste(c(contr1,contr2),collapse='-'),1,30),'__Heatmap_',toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='_')),".jpeg"), units="in", width=18, height=12, res=300)
 
-      ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows = "ward.D",clustering_method_columns  = "ward.D", col = f2, name = paste0(toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse = 'vs')), " - Pathway combinations scores (",paste(c(repositoryName,enrichmentdb,enrichmentTOOL),collapse = '-')," ",substr(paste(c(contr1,contr2),collapse = '-'),1,30), "... Combination Scores >", combscore_cutoff,", n=", nrow(tmp),")"), row_names_gp = gpar(fontsize = 10-nrow(tmp)*0.05, fontface = "bold", col=col_paths),column_names_gp = gpar(fontsize = 12, fontface = "bold",col=cols), heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height = unit(0.8, "cm"),legend_width = unit(10, "cm"),labels_gp = gpar(fontsize = 12),title_gp = gpar(fontsize = 10, fontface = "bold"),title_position = "topcenter"),use_raster = F)
-      tmpheat=draw(ht2, heatmap_legend_side = "top",  column_title_gp=gpar(fontface="bold", line = 5),annotation_legend_list = lgd_list,annotation_legend_side = "bottom")
-      k=paste0('Heatmap','_',d)
-      heatmaps[[k]]<-tmpheat
-      dev.off()
-      rm(ind); rm(pathways); rm(tmp)
-    }}}
+            ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='vs')), " - Pathway combinations scores \n (",paste(c(repositoryName,enrichmentdb,enrichmentTOOL),collapse='-'),"\n",substr(paste(c(contr1,contr2),collapse='-'),1,30), "... \n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), row_names_gp=gpar(fontsize=10-nrow(tmp)*0.05, fontface="bold", col=col_paths),column_names_gp=gpar(fontsize=12, fontface="bold",col=cols), heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height=unit(0.8, "cm"),legend_width=unit(10, "cm"),labels_gp=gpar(fontsize=12),title_gp=gpar(fontsize=10, fontface="bold"),title_position="topcenter"),use_raster=F)
+            tmpheat=draw(ht2, heatmap_legend_side="top",  column_title_gp=gpar(fontface="bold", line=5),annotation_legend_list=lgd_list,annotation_legend_side="bottom")
+            k=paste0('Heatmap','_',d)
+            heatmaps[[k]]=tmpheat
+            dev.off()
+            rm(ind); rm(pathways); rm(tmp)
+          }}}
   rm(drugnames)
   return(result)
-}
+}, error=function(e){print('Warning: Some contrasts may not have been processed (due to lack of overlaps between the query compounds). Please, check the outputs or you can also try lower combination score thresholds')})}
 
 
 
@@ -418,74 +496,74 @@ upsetlister=function(slicenrichrlist,refcompounds=NULL,direction=NULL, combscore
   if (!updowncontrasts) {
     if (is.null(direction)) {ds=c('complete','up','down')}
     else {ds=tolower(direction)
-    while (sum(grepl(ds, c('complete','up','down'),ignore.case = T))==0) { ds=tolower(as.character(readline(prompt = 'Please check out misspelling, if any: complete/up/down?')))}
+    while (sum(grepl(ds, c('complete','up','down'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: complete/up/down?')))}
     }}else if (updowncontrasts) {
       if (is.null(direction)) {ds=c('up_down','down_up')}
       else {ds=tolower(direction)
-      while (sum(grepl(ds, c('up_down','down_up'),ignore.case = T))==0) { ds=tolower(as.character(readline(prompt = 'Please check out misspelling, if any: up_down/down_up?')))}
+      while (sum(grepl(ds, c('up_down','down_up'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: up_down/down_up?')))}
       }}
   resp='y'
-  if (is.null(refcompounds)) {refcompounds=as.character(readline(prompt = 'Please provide a valid compound name from the list: '))
-    while (sum(grepl(paste(refcompounds,collapse = "|"), drugnames,ignore.case = T))==0) { refcompounds=as.character(readline(prompt = 'Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
-      resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))
-    while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))}
-    while (resp!='n') {nextcomp=tolower(as.character(readline(prompt = 'Name of the next compound: ')))
-      while (sum(grepl(paste(nextcomp,collapse = "|"), drugnames,ignore.case = T))==0) { nextcomp=as.character(readline(prompt = 'Please recheck the compound name, and provide it once again: '))}
-      refcompounds=append(refcompounds, nextcomp)
-      resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))
-      while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))}}
-      }
+  if (is.null(refcompounds)) {refcompounds=as.character(readline(prompt='Please provide a valid compound name from the list: '))
+  while (sum(grepl(paste(refcompounds,collapse="|"), drugnames,ignore.case=T))==0) { refcompounds=as.character(readline(prompt='Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}
+  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt='Name of the next compound: ')))
+  while (sum(grepl(paste(nextcomp,collapse="|"), drugnames,ignore.case=T))==0) { nextcomp=as.character(readline(prompt='Please recheck the compound name, and provide it once again: '))}
+  refcompounds=append(refcompounds, nextcomp)
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}}
+  }
   upsetlist=list();
   for(d in ds){tmp=as.data.frame(slicenrichrlist[names(slicenrichrlist)%in%d][[1]])
-    ind=which(grepl(paste(refcompounds,collapse = "|"), colnames(tmp),ignore.case = T))
-    if (!updowncontrasts) {colnames(tmp)[ind]=paste0(colnames(tmp[,ind]),'_',d)}
-      for (i in ind) {comp=list(rownames(tmp[tmp[,i]>log2(combscore_cutoff),]))
-      names(comp)=colnames(tmp)[i]
-      upsetlist=append(upsetlist, comp)
-      }
-      }
+  ind=which(grepl(paste(refcompounds,collapse="|"), colnames(tmp),ignore.case=T))
+  if (!updowncontrasts) {colnames(tmp)[ind]=paste0(colnames(tmp[,ind]),'_',d)}
+  for (i in ind) {comp=list(rownames(tmp[tmp[,i]>log2(combscore_cutoff),]))
+  names(comp)=colnames(tmp)[i]
+  upsetlist=append(upsetlist, comp)
+  }
+  }
   return(upsetlist)}
 
 
 #paths_list: Retrieves intersections of the pathway names across the user defined queries and upsetlists. Further implemented in the upsetlistlegend function
-paths_list= function(myqueries, allqueries,intersectionlist){
+paths_list=function(myqueries, allqueries,intersectionlist){
   require(devtools); require(Vennerable)
-  unlist(intersectionlist[paste(as.numeric(allqueries %in% myqueries),collapse = "")])}
+  unlist(intersectionlist[paste(as.numeric(allqueries %in% myqueries),collapse="")])}
 
 
-#termgenesmajor, retrieves the names of the differential genes relating with the previous enrichr pathway outputs. 
-##Hence, it allows seeing overexpression or knockdown of which genes (from CMap/iLINCS) can be further important. 
+#termgenesmajor, retrieves the names of the differential genes relating with the previous enrichr pathway outputs.
+##Hence, it allows seeing overexpression or knockdown of which genes (from CMap/iLINCS) can be further important.
 ##The function is also nested inside the upsetlistlegend function
 termgenesmajor=function(enrichrlist,direction=NULL, refcompounds=NULL){
   drugnames=gsub('\\.','_',gsub('.*_','',gsub('_[^_]*$','',colnames(as.data.frame(enrichrlist[[1]][3])))))
   if (is.null(direction)) {ds=c('complete','up','down')}
   else {ds=tolower(direction)
-  while (sum(grepl(ds, c('complete','up','down'),ignore.case = T))==0) { ds=tolower(as.character(readline(prompt = 'Please check out misspelling, if any: complete/up/down?')))}
+  while (sum(grepl(ds, c('complete','up','down'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: complete/up/down?')))}
   }
   resp='y'
-  if (is.null(refcompounds)) {refcompounds=as.character(readline(prompt = 'Please provide a valid compound name from the list: '))
-  while (sum(grepl(paste(refcompounds,collapse = "|"), drugnames,ignore.case = T))==0) { refcompounds=as.character(readline(prompt = 'Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
-  resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))
-  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))}
-  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt = 'Name of the next compound:')))
-  while (sum(grepl(paste(nextcomp,collapse = "|"), drugnames,ignore.case = T))==0) { nextcomp=as.character(readline(prompt = 'Please recheck the compound name, and provide it once again: '))}
+  if (is.null(refcompounds)) {refcompounds=as.character(readline(prompt='Please provide a valid compound name from the list: '))
+  while (sum(grepl(paste(refcompounds,collapse="|"), drugnames,ignore.case=T))==0) { refcompounds=as.character(readline(prompt='Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}
+  while (resp!='n') {nextcomp=tolower(as.character(readline(prompt='Name of the next compound:')))
+  while (sum(grepl(paste(nextcomp,collapse="|"), drugnames,ignore.case=T))==0) { nextcomp=as.character(readline(prompt='Please recheck the compound name, and provide it once again: '))}
   refcompounds=append(refcompounds, nextcomp)
-  resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))
-  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt = 'Wanna add more compounds: yes (Y) / no (N)   ')))}}
+  resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more compounds: yes (Y) / no (N)   ')))}}
   }
-  majorlist=setNames(data.frame(matrix(ncol = 1, nrow = 0)), c("Term"))
+  majorlist=setNames(data.frame(matrix(ncol=1, nrow=0)), c("Term"))
   for(d in ds){tmp=enrichrlist[[d]][[3]]
-  ind=which(grepl(paste(refcompounds,collapse = "|"), colnames(tmp),ignore.case = T))
+  ind=which(grepl(paste(refcompounds,collapse="|"), colnames(tmp),ignore.case=T))
   colnames(tmp)[ind]=paste0(colnames(tmp[,ind]),'_',d)
   majorlist=merge(majorlist, as.data.frame(tmp[,c(1,ind)]), by='Term', all=T)
   }
   return(majorlist)
 }
 
-#querylister allows conversion of queries to compatible formats to be processed along with upsetlists and upset plots. Requires intersectionSets from Venn function (see vennerable)
+#querylister allows conversion of queries to compatible formats to be processed along with upsetlists and upset plots. Requires intersectionSets from Venn function (see vennerable). Numbers of queries for each comparisons can be adjusted with the lowerlimit and upperlimit options
 querylister=function(intersectionSets,upsetlist, lowerlimit=0, upperlimit=max(lengths(intersectionSets))){qs=list()
 ques=intersectionSets[lengths(intersectionSets)>lowerlimit & lengths(intersectionSets)<=max(lengths(intersectionSets))]
-quenames=names(ques[order(lengths(ques),decreasing = T)])
+quenames=names(ques[order(lengths(ques),decreasing=T)])
 for (ints in quenames) {
   ints_membs=strsplit(ints, '')[[1]]
   tmplist=list()
@@ -496,50 +574,58 @@ rm(ques);rm(quenames);names(qs)=NULL;
 return(qs)}
 
 
-#upsetlistlegend creates the upsetplots with appropriate legend annotations that are defined by the users' querylists. 
-##In addition, pathways of interests and their respective genes from CMap/iLINCS studies are extracted in excel sheets to the working directory.
-upsetlistlegend=function(upsetlist, querylist, enrichrlist,outputlist=NULL,colorpal='Dark2', ylabel='No. of Pathways', cell_line='NA',combscore_cutoff='NA',enrichmentdb=NULL,refcompounds=NULL,upsetFigure=T,enrichmentTOOL,repositoryName='iLINCS'){
+#upsetlistlegend creates the upsetplots with appropriate legend annotations that are defined by the users' querylists.
+##In addition, pathways of interests and their respective genes from CMap/iLINCS studies are extracted in excel sheets to the working directory. Maximum total numbers of pathway terms in the querylists (npathways arguement) are defaulted to 50 to prevent overcrowding the upsetplot figure while the full range of pathways between the queries are still accessible within the output excel sheet. 
+upsetlistlegend=function(upsetlist, querylist, enrichrlist,outputlist=NULL,colorpal=NULL, ylabel='No. of Pathways', cell_line='NA',combscore_cutoff='NA',enrichmentdb=NULL,refcompounds=NULL,upsetFigure=T,enrichmentTOOL,repositoryName='iLINCS', npathways=50){
   require(stringr)
   require(Vennerable)
   require(RColorBrewer)
   require(UpSetR)
   require(openxlsx)
+  if (is.null(cell_line)) {cell_line=as.character(readline(prompt='What was the name of the cell line used in the study (please double-check, this is for representation purposes only): '))
+  while (length(cell_line)==0) { cell_line=as.character(readline(prompt='What was the name of the cell line used in the study (please double-check, this is for representation purposes only): '))}}
+  if (is.null(combscore_cutoff)) {combscore_cutoff=as.character(readline(prompt='What was the ncombination score threshold that you applied (please double-check, this is for representation purposes only): '))
+  while (length(combscore_cutoff)==0) { combscore_cutoff=as.character(readline(prompt='What was the ncombination score threshold that you applied (please double-check, this is for representation purposes only): '))}}
 
   temp=Venn(upsetlist)  #provide all your groups as list
 
-  names(upsetlist)=factor(names(upsetlist),levels = sort(names(upsetlist)))
+  names(upsetlist)=factor(names(upsetlist),levels=sort(names(upsetlist)))
 
   # Define the number of colors you want
-  nb.cols <- length(querylist)
-  mycolors <- colorRampPalette(brewer.pal(8, "Dark2"))(nb.cols)
-
-  pathtables=termgenesmajor(enrichrlist, direction = NULL,refcompounds =  refcompounds)
-  gridtable=setNames(data.frame(matrix(ncol = ncol(pathtables), nrow = 0)),colnames(pathtables))
+  if (is.null(colorpal)) {
+    colorpal='Dark2'
+  }
+  nb.cols=min(npathways, length(querylist))
+  mycolors=colorRampPalette(brewer.pal(8, colorpal))(nb.cols)
+  pathtables=termgenesmajor(enrichrlist, direction=NULL,refcompounds= refcompounds)
+  gridtable=setNames(data.frame(matrix(ncol=ncol(pathtables), nrow=0)),colnames(pathtables))
   queries=list()
 
   for (i in 1:length(querylist)) {
     queries[[i]]=list(query=intersects,params=querylist[[i]], color=mycolors[i], active=T)}
 
-  cnts=0
+ 
   if (upsetFigure) {
 
-    jpeg(paste0(gsub('-','',Sys.Date()),"_",as.character(repositoryName),'_',as.character(enrichmentTOOL),cell_line,'_',paste(substr(str_to_title(refcompounds),1,4),collapse = ''),"_CombScore",combscore_cutoff,"_",enrichmentdb,"_UpsetPlot.jpeg"), units="in", width=14, height=10, res=300)
+    jpeg(paste0(gsub('-','',Sys.Date()),"_",as.character(repositoryName),'_',as.character(enrichmentTOOL),cell_line,'_',paste(substr(str_to_title(refcompounds),1,4),collapse=''),"_CombScore",combscore_cutoff,"_",enrichmentdb,"_UpsetPlot.jpeg"), units="in", width=14, height=10, res=300)
 
-    upsetpl=upset(fromList(upsetlist), nsets = sum(lengths(temp@IntersectionSets)>0), queries =queries, order.by = "freq", mainbar.y.label = ylabel)
+    upsetpl=upset(fromList(upsetlist), nsets=sum(lengths(temp@IntersectionSets)>0), queries=queries, order.by="freq", mainbar.y.label=ylabel)
     print(upsetpl)
-    grid.text(paste0(enrichmentdb,' Upset plot - ', paste(str_to_title(refcompounds),collapse = ' & '),' Pathways (Combination Score >', combscore_cutoff,')'),x = 0.4, y=0.98, gp=gpar(fontsize=10, fontface='bold'),just = "left")}
-
+    grid.text(paste0(enrichmentdb,' Upset plot - Pathways \n (log2(Combination Score) >', combscore_cutoff,')'),x=0.5, y=0.94, gp=gpar(fontsize=10, fontface='bold'),just="centre")}
+  
+  cnts=0
+  
   for (i in 1:length(querylist)) {
-    plist=paths_list(myqueries = unlist(querylist[[i]]), allqueries = names(upsetlist), temp@IntersectionSets)
+    plist=paths_list(myqueries=unlist(querylist[[i]]), allqueries=names(upsetlist), temp@IntersectionSets)
     tmptable=pathtables[pathtables$Term %in% unlist(plist),]
     gridtable=rbind(gridtable,tmptable)
-
-    if (upsetFigure) {for (j in 1:length(plist)) {
-      grid.text(plist[[j]],x = 0.78, y=(0.96-cnts*0.011), gp=gpar(fontsize=6.5, col=mycolors[i], fontface='bold'),just = "left")
+    if(nrow(gridtable)<=npathways & upsetFigure){
+    for (j in 1:length(plist)) {
+      grid.text(plist[[j]],x=0.78, y=(0.96-cnts*0.011), gp=gpar(fontsize=6.5, col=mycolors[i], fontface='bold'),just="left")
       cnts=cnts+1}}}
-  if (upsetFigure) {grid.polygon(x=c(0.75,1,1,0.75), y=c((0.95-cnts*0.011),(0.95-cnts*0.011),0.97,0.97), gp = gpar(fill="gray", alpha=0.2))
+  if (upsetFigure) {grid.polygon(x=c(0.75,1,1,0.75), y=c((0.95-cnts*0.011),(0.95-cnts*0.011),0.97,0.97), gp=gpar(fill="gray", alpha=0.2))
     dev.off()}
-  write.xlsx(x = gridtable,file = paste0(gsub('-','',Sys.Date()),"_",as.character(repositoryName),'_',as.character(enrichmentTOOL),'_',cell_line,'_',paste(substr(str_to_title(refcompounds),1,4),collapse = ''),"_CombScore",combscore_cutoff,"_",enrichmentdb,"_UpsetPlotLegend.xlsx"), row.names = F)
+  write.xlsx(x=gridtable,file=paste0(gsub('-','',Sys.Date()),"_",as.character(repositoryName),'_',as.character(enrichmentTOOL),'_',cell_line,'_',paste(substr(str_to_title(refcompounds),1,4),collapse=''),"_CombScore",combscore_cutoff,"_",enrichmentdb,"_UpsetPlotLegend.xlsx"), rowNames=F)
   return(gridtable)
 }
 
