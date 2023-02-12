@@ -1,66 +1,184 @@
-#' Data analysis workflow functions for the documents that are retrieved from CMap/iLINCS/SwissTargetPrediction platforms (xls/txt mainly)
-#' February 11, 2023 - Murat Yaman
-#' @param ptrn Defaults to _conn_HA1E_ or iLINCS_complete_HA1E, just change it the way you kept your data, preferably in a similar format and in a seperate folder to avoid confusion
+#' Data analysis workflow functions for the xls/txt documents that are retrieved from CMap/iLINCS/SwissTargetPrediction platforms
+#'
+#' @param ptrn Defaults to _conn_HA1E_, just change it the way you kept your data, preferably in seperate folder to avoid confusion
 #' @param types Defaults to kd and oe
 #' @keywords mylib
 #' connectivitydatafile_compiler()
 
-##connectivitydatafile_compiler: Compiles gene connectivity data retrieved from CMap.Currently, it works locally and utilizes names of the downloaded files to parse through.
+##connectivitydatafile_compiler: Compiles CMap connectivity data.Currently, it works locally and utilizes names of the downloaded files to parse through. Main output file contains gene connectivity data from knock-down/over-expression studies. 
+##In addition, connectivity score thresholds can be further specified and heatmaps/correlation plots can be produced, if called. Users can also query for compound-compound connectivity and compound-compound class connectivity data. 
 ##Future formats can include a logical variable whether the data should be accessed locally or from CMap directly.
 ##Accordingly, curl commands can be posted to and retrieved from CMap Clue.
-connectivitydatafile_compiler=function(ptrn=NULL, types=NULL){
+
+connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman', cmaprank_cutoff=98, cor_outputs=F, heatmap_outputs=F, width_heat=18, height_heat=12, res_heat=300){
+  fullds=c('kd','oe','cp','cc')
   if(is.null(ptrn)){pattern='_conn_HA1E_'
   }else {pattern=ptrn
   while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
-
+  
+  resp='y'
   if (is.null(types)) {typewise=c('kd','oe')
   }  else {typewise=tolower(types)
-  while (sum(grepl(paste(typewise, collapse='|'), c('kd','oe','cp','cc'),ignore.case=T))==0) { typewise=tolower(as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  ')))}
-  }
+  if (sum(tolower(typewise) %in% fullds)!=length(typewise)) {typewise=fullds[which(fullds%in%typewise)]
+    print('Warning: One or more types arguement is missing. Calculation will be continued with the correct arguements available.')
+  }}
+  while (sum(tolower(typewise) %in% fullds)==0) { 
+    typewise=tolower(as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  ')))
+  resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
+  while (resp!='n') {nextype=tolower(as.character(readline(prompt='Name of the next connectivity types: ')))
+  while (sum(tolower(nextype) %in% fullds)==0) { nextype=as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  '))}
+  typewise=tolower(unique(append(typewise, nextype)))
+  resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))
+  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
+  }}
+ 
   files=list.files(pattern=pattern)
-  if (sum(typewise%in%'cp')==0) {for (i in files) {  if (!exists("dataset")){
-    dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+  for (i in files) {if (!exists("dataset")){
+    dataset=read.csv(i,header=T,sep="\t")[,c("Name", "Type","Score")]
     colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-    dataset=dataset[dataset$Type%in%typewise,]
+    dataset$Name=gsub(x=dataset$Name, pattern="[[:punct:]]", replacement="_")
+    # dataset=dataset[dataset$Type%in%typewise,]
     dataset$Name_type=paste0(dataset$Name,"_",dataset$Type);
-    dataset$Name_type=gsub(' ','_',dataset$Name_type)
+    # dataset$Name_type=gsub(' ','_',dataset$Name_type)
     dataset$Name=NULL; dataset$Type=NULL
+    dataset=dataset %>% group_by(Name_type) %>% summarise_all(funs(mean))
   }
     if (exists("dataset")){
-      temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+      temp_dataset=read.csv(i,header=T,sep="\t")[,c("Name", "Type","Score")]
       colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+      temp_dataset$Name=gsub(x=temp_dataset$Name, pattern="[[:punct:]]", replacement="_")
       temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Type);
-      temp_dataset=temp_dataset[temp_dataset$Type%in%typewise,]
-      temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
+      # temp_dataset=temp_dataset[temp_dataset$Type%in%typewise,]
+      # temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
       temp_dataset$Name=NULL; temp_dataset$Type=NULL
-      dataset=merge(dataset, temp_dataset, by="Name_type",all=T)
+      temp_dataset=temp_dataset %>% group_by(Name_type) %>% summarise_all(funs(mean))
+      if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+        dataset=merge(dataset, temp_dataset, by="Name_type",all=T)}
       rm(temp_dataset)
-    }}} else {for (i in files) {
-
-      if (!exists("dataset")){
-        dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score",'Description')]
-        colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-        dataset=dataset[dataset$Type=='cp',]
-        dataset$Name_type=paste0(dataset$Name,"_",dataset$Description);
-        dataset$Name_type=gsub(' ','_',dataset$Name_type)
-        dataset$Name=NULL; dataset$Type=NULL; dataset$Description=NULL
-      }
-      if (exists("dataset")){
-        temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
-        colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-        temp_dataset=temp_dataset[temp_dataset$Type=='cp']
-        temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Description);
-        temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
-        temp_dataset$Name=NULL; temp_dataset$Type=NULL;dataset$Desctiption=NULL
-        dataset=merge(dataset, temp_dataset, by="Name_type",all=T)
-        rm(temp_dataset)
-      }}}
-  dataset=dataset[,-2]
-  colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
-  colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
+    }}
   dataset=dataset[!duplicated(dataset),]
   rownames(dataset)=dataset$Name_type
+  #replace special characters with underscore to avoid further issues
+  colnames(dataset)=gsub(x=colnames(dataset), pattern="[[:punct:]]", replacement="_")
   dataset[is.na(dataset)]=0
+  
+  cpcc=which(typewise%in%c('cp', 'cc'))
+  kdoe=which(typewise%in%c('kd','oe'))
+  
+  for (ds in typewise) {
+    require(strex)
+    tmp=dataset[grepl(x=rownames(dataset),paste0("^.+_", ds,"$")),]
+    tmp$Name_type=NULL
+    tmp=as.matrix.data.frame(tmp)
+    if (ds %in% typewise[cpcc]) {
+      rownames(tmp)=strex::str_before_last(pattern = paste0('_',ds),string = rownames(tmp)) 
+    }
+    # tmp=tmp[rowSums(abs(tmp)>cpccthreshold)>=1,]
+    plotlab=''
+    if (ds=='cp') {plotlab='ConnectivityMap matching compounds'
+    } else if (ds=='cc') {plotlab='ConnectivityMap matching compound classes'
+    } else if (ds=='kd') {plotlab='ConnectivityMap gene knock-down matches'
+    } else if (ds=='oe') {plotlab='ConnectivityMap gene over-expression matches'
+    }
+    
+    #corplot
+    cormat_go=signif(cor(tmp,method=cormethod),2)
+    proco=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
+    antico_thr=c('Warfarin','APIXABAN','Dabigatran', 'argatroban', 'skatole', 'phenindione')
+    proco_thr=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
+    bloods=c('blood', 'thromb', 'agula', 'erythroc', 'leukoc', 'arteri','vein ', 'vascular')
+    
+    corrplots=list()
+    heatmaps=list()
+    
+    cols=rep('black', ncol(tmp))
+    cols[grepl(paste(proco, collapse='|'), colnames(tmp),ignore.case=T)]='red4'
+    cols[grepl(paste(antico_thr, collapse='|'), colnames(tmp),ignore.case=T)]='dimgray'
+    cols[grepl(paste(proco_thr, collapse='|'), colnames(tmp),ignore.case=T)]='red'
+    col_paths=rep('black',nrow(tmp))
+    col_paths[grepl(paste(bloods, collapse='|'), rownames(tmp),ignore.case=T)]='blue'
+    if (cor_outputs) {
+      par(cex.main=1)
+      lgd_list=Legend(labels=c("Pro-coagulants", "Anti-coagulants", 'iLINCS: Pro-coagulants','iLINCS: Anti-coagulants'), title="Compound types", type="points", pch=18, legend_gp=gpar(col=c("red4","black",'red', 'dimgray'), fontsize=24))
+      f1=colorRamp2(seq(-abs(max(cormat_go)), abs(max(cormat_go)), length=3), c("#3f7fff", "#EEEEEE", "red"))
+      jpeg(paste0(gsub('-','',Sys.Date()),'_',toupper(ds),'_','threshold',cmaprank_cutoff,'_',toupper(cormethod),'corplot',".jpeg"), units="in", width=18, height=12, res=300)
+      ht1=Heatmap(cormat_go,clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f1, name=paste0(plotlab,"\n |CMap threshold| > ", cmaprank_cutoff), row_names_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold", col=cols),column_names_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold", col=cols),
+                  heatmap_legend_param=list(legend_direction="horizontal", title_position="topcenter", grid_height=unit(0.6, "cm"),legend_width=unit(8, "cm"),labels_gp=gpar(fontsize=nrow(cormat_go)*2),title_gp=gpar(fontsize=nrow(cormat_go)*2, fontface="bold")),
+                  cell_fun=function(j, i, x, y, w, h, col) { # add text to each grid
+                    grid.text(cormat_go[i, j], x, y,gp=gpar(fontsize=nrow(cormat_go)*2, fontface='bold'))})
+      tmpfig=draw(ht1, heatmap_legend_side="bottom", column_title=paste0("Corplot - ",plotlab,'\n',cormethod," correlations \n |Connectivity Scores| > ", cmaprank_cutoff,", n=", nrow(tmp),")"), column_title_gp=gpar(fontface="bold", line=5), annotation_legend_list=lgd_list,annotation_legend_side="right")
+      k=paste0('Corplot','_',ds)
+      corrplots[[k]]=tmpfig
+      dev.off()}
+    
+    #heatmaps
+    if (heatmap_outputs) {
+      require(magick)
+      tmp2=as.data.frame(tmp)
+      tmp2=as.data.frame.matrix(tmp[rowSums(abs(tmp)>cmaprank_cutoff)>=1,])
+      col_paths2=rep('black',nrow(tmp2))
+      col_paths2[grepl(paste(bloods, collapse='|'), rownames(tmp2),ignore.case=T)]='blue'
+      f2=colorRamp2(seq(max(tmp2), min(tmp2), length=3),  c("#3f7fff", "#EEEEEE", "red"))
+      jpeg(paste0(gsub('-','',Sys.Date()),'_',toupper(ds),'_','threshold',cmaprank_cutoff,'_','Heatmap','.jpeg'), units="in", width=width_heat, height=height_heat, res=res_heat)
+      
+      ht2=Heatmap(as.matrix.data.frame(tmp2),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(plotlab,'\n',cormethod," correlations \n |Connectivity Scores| > ", cmaprank_cutoff,", n=", nrow(tmp2),")"), row_names_gp=gpar(fontsize=max(10-nrow(tmp2)*0.05,2), fontface="bold", col=col_paths), show_row_names = T,column_names_gp=gpar(fontsize=12, fontface="bold",col=cols),
+                  heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height=unit(0.8, "cm"), legend_width=unit(10, "cm"),labels_gp=gpar(fontsize=12),title_gp=gpar(fontsize=18, fontface="bold"), title_position="topcenter"),use_raster=F)
+      tmpheat=draw(ht2, heatmap_legend_side="top",  column_title_gp=gpar(fontface="bold", line=5),annotation_legend_list=lgd_list,annotation_legend_side="bottom")
+      k=paste0('Heatmap','_',ds)
+      heatmaps[[k]]=tmpheat
+      dev.off()
+      # rm(ind); rm(pathways); rm(tmp)
+    }
+    rm(tmp)}
+  
+  # if (sum(typewise%in%'cp')==0) {for (i in files) {  if (!exists("dataset")){
+  #   dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+  #   colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+  #   dataset=dataset[dataset$Type%in%typewise,]
+  #   dataset$Name_type=paste0(dataset$Name,"_",dataset$Type);
+  #   dataset$Name_type=gsub(' ','_',dataset$Name_type)
+  #   dataset$Name=NULL; dataset$Type=NULL
+  # }
+  #   if (exists("dataset")){
+  #     temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+  #     colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+  #     temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Type);
+  #     temp_dataset=temp_dataset[temp_dataset$Type%in%typewise,]
+  #     temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
+  #     temp_dataset$Name=NULL; temp_dataset$Type=NULL
+  #     if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+  #       dataset=merge(dataset, temp_dataset, by="Name_type",all=T)}
+  #       rm(temp_dataset)
+  #   }}} else {for (i in files) {
+  # 
+  #     if (!exists("dataset")){
+  #       dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score",'Description')]
+  #       colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+  #       dataset=dataset[dataset$Type=='cp',]
+  #       dataset$Name_type=paste0(dataset$Name,"_",dataset$Description);
+  #       dataset$Name_type=gsub(' ','_',dataset$Name_type)
+  #       dataset$Name=NULL; dataset$Type=NULL; dataset$Description=NULL
+  #     }
+  #     if (exists("dataset")){
+  #       temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
+  #       colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
+  #       temp_dataset=temp_dataset[temp_dataset$Type=='cp']
+  #       temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Description);
+  #       temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
+  #       temp_dataset$Name=NULL; temp_dataset$Type=NULL;dataset$Desctiption=NULL
+  #       if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+  #       
+  #       dataset=merge(dataset, temp_dataset, by="Name_type",all=T)}
+  #       dataset=dataset
+  #       rm(temp_dataset)
+  #     }}}
+  # dataset=dataset[,-2]
+  # colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
+  # colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
+  
+  #Retrieve the data for kd/oe experiments only to process further with gene enrichment analyses
+  dataset=dataset[grepl(x=rownames(dataset),paste0("^.+_(kd|oe)$")),]
   return(dataset)
 }
 
@@ -284,6 +402,7 @@ enrichr_output=function(drug_list,dataset,logDEcutoff=0,pcutoff,dbs,direction=NU
 #slicenricher: CMap ranks are default to FALSE, unless users provide a rank list of kd/oe studies from CMap connectivity data. The functions, slices and collects specified data (based on Combined score cutoff) from the enrichr_output function. Accordingly, it retrieves pathway enrichment scores from up or downregulated genes ('complete' option accounts both up and downregulated genes together). Based on the enrichment scores, users can visually inspect pathway enrichment profiles across the treatments either by heatmaps or corplots
 ##Currently, it only utilizes the EnrichedTermsScores objects from the enrichr_output data.
 ##Specifications rely on the combscore cutoff values for each reference compound. List of the drugs can be fetched into data as a drug_list, or the function prompts users to specify the names of the compounds to be compared.
+##Combination scores are presented on log2 scale. Accordingly, minimum combination score value is capped to 1 (hence log2(1)=0 across the representations)
 ##Main outputfile contains a list for the pathway names passing the threshold and their combination scores for the respective compounds inquired by the user.
 ##Lists are given in separate sections for each direction (up/down/complete)). In addition, the correlation plots (by default 'spearman') and
 ##heatmaps are produced and saved in the current directory, unless indicated otherwise.
@@ -330,9 +449,9 @@ slicenricher=function(enrichrlist, direction=NULL, combscore_cutoff=200, refcomp
   ind=which(grepl(paste(refcompounds,collapse="|"), colnames(tmp),ignore.case=T))
   pathways=vector()
   for (i in ind) {pathways=unique(append(pathways,rownames(tmp[which(tmp[,i]>combscore_cutoff),])))}
-  tmp=tmp[rownames(tmp)%in%pathways,]
-  tmp[,-1]=log2(tmp[,-1]) #Log scale the combination scores
-  tmp[tmp<0]=0
+  tmp=tmp[rownames(tmp)%in%pathways,ind]
+  tmp[tmp<=1]=1
+  tmp=log2(tmp) #Log scale the combination scores
   result[[d]]=tmp
   tmp$Term=NULL
   tmp=tmp[,colSums(tmp)>0]
@@ -365,7 +484,7 @@ slicenricher=function(enrichrlist, direction=NULL, combscore_cutoff=200, refcomp
             f2=colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
             jpeg(paste0(deparse(substitute(enrichrlist)),'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substring(paste(refcompounds,collapse='-'),1,15),"_Heatmap_",toupper(d),".jpeg"), units="in", width=width_heat, height=height_heat, res=res_heat)
 
-            ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(toupper(d), " - Pathway combinations scores \n","(EnrichR ",paste(refcompounds,collapse='-'), "\n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), row_names_gp=gpar(fontsize=10-nrow(tmp)*0.05, fontface="bold", col=col_paths),column_names_gp=gpar(fontsize=12, fontface="bold",col=cols),
+            ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(toupper(d), " - Pathway combinations scores \n","(EnrichR ",paste(refcompounds,collapse='-'), "\n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), row_names_gp=gpar(fontsize=max(10-nrow(tmp2)*0.05,2), fontface="bold", col=col_paths),column_names_gp=gpar(fontsize=12, fontface="bold",col=cols),
                         heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height=unit(0.8, "cm"),legend_width=unit(10, "cm"),labels_gp=gpar(fontsize=12),title_gp=gpar(fontsize=18, fontface="bold"),title_position="topcenter"),use_raster=F)
             tmpheat=draw(ht2, heatmap_legend_side="top",  column_title_gp=gpar(fontface="bold", line=5),annotation_legend_list=lgd_list,annotation_legend_side="bottom")
             k=paste0('Heatmap','_',d)
@@ -374,7 +493,7 @@ slicenricher=function(enrichrlist, direction=NULL, combscore_cutoff=200, refcomp
             rm(ind); rm(pathways); rm(tmp)
           }}}
   rm(drugnames)
-  return(result)},error=function(e){print('Warning: Combination score cut-off might be too stringent for some of the compounds. Please, check the outputs or you can also try lower combination score thresholds')})
+  return(result)},error=function(e){print('Warning: There was an error. Please, check if the parameters are correct. Combination score cut-off might be too stringent for some of the compounds. Please, check the outputs or you can also try lower combination score thresholds')})
 }
 
 #slicenricher_updown: Similar to slicenricher. It allows comparing different groups of drugs (pro-coagulants vs anti-coagulants) to see whether there are any pathways that move in same/opposite directions.
@@ -477,7 +596,7 @@ slicenricher_updown=function(enrichrlist, combscore_cutoff=200, contr1=NULL,cont
             f2=colorRamp2(seq(max(tmp), min(tmp), length=3),  c("#3f7fff", "#EEEEEE", "red"))
             jpeg(paste0(deparse(substitute(enrichrlist)),'_',repositoryName,'_',enrichmentdb,'_',as.character(enrichmentTOOL),'_',substr(paste(c(contr1,contr2),collapse='-'),1,30),'__Heatmap_',toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='_')),".jpeg"), units="in", width=18, height=12, res=300)
 
-            ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='vs')), " - Pathway combinations scores \n (",paste(c(repositoryName,enrichmentdb,enrichmentTOOL),collapse='-'),"\n",substr(paste(c(contr1,contr2),collapse='-'),1,30), "... \n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), row_names_gp=gpar(fontsize=10-nrow(tmp)*0.05, fontface="bold", col=col_paths),column_names_gp=gpar(fontsize=12, fontface="bold",col=cols), heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height=unit(0.8, "cm"),legend_width=unit(10, "cm"),labels_gp=gpar(fontsize=12),title_gp=gpar(fontsize=10, fontface="bold"),title_position="topcenter"),use_raster=F)
+            ht2=Heatmap(as.matrix.data.frame(tmp),clustering_method_rows="ward.D",clustering_method_columns ="ward.D", col=f2, name=paste0(toupper(paste(c(ds[[d]][1],ds[[d]][2]),collapse='vs')), " - Pathway combinations scores \n (",paste(c(repositoryName,enrichmentdb,enrichmentTOOL),collapse='-'),"\n",substr(paste(c(contr1,contr2),collapse='-'),1,30), "... \n log2(Combination Scores >", combscore_cutoff,"), n=", nrow(tmp),")"), row_names_gp=gpar(fontsize=max(10-nrow(tmp2)*0.05,2), fontface="bold", col=col_paths),column_names_gp=gpar(fontsize=12, fontface="bold",col=cols), heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height=unit(0.8, "cm"),legend_width=unit(10, "cm"),labels_gp=gpar(fontsize=12),title_gp=gpar(fontsize=10, fontface="bold"),title_position="topcenter"),use_raster=F)
             tmpheat=draw(ht2, heatmap_legend_side="top",  column_title_gp=gpar(fontface="bold", line=5),annotation_legend_list=lgd_list,annotation_legend_side="bottom")
             k=paste0('Heatmap','_',d)
             heatmaps[[k]]=tmpheat
@@ -486,22 +605,16 @@ slicenricher_updown=function(enrichrlist, combscore_cutoff=200, contr1=NULL,cont
           }}}
   rm(drugnames)
   return(result)
-}, error=function(e){print('Warning: Some contrasts may not have been processed (due to lack of overlaps between the query compounds). Please, check the outputs or you can also try lower combination score thresholds')})}
+}, error=function(e){print('Warning: There was an error. Please, check if the parameters are correct. Otherwise, some contrasts may not have been processed (due to lack of overlaps between the query compounds). Please, check the outputs or you can also try lower combination score thresholds')})}
 
 
 
 ##upsetlister, an implemented function to provide the input for the upset plots and venn interaction terms. So that, from many pathways in the list, users can see how many of them are shared among the reference compounds and across different directions. If the lists do not seem complicated (meaning that they are not enriched with multiple pathways and directions) upsetlist and further plots will not be needed.Slicenricher outputs are preferred and transformed into upset plot convenient list forms while collecting pathways that are above a certain threshold. Reference compounds and regulation direction (up, down or complete) can be further specified.
-upsetlister=function(slicenrichrlist,refcompounds=NULL,direction=NULL, combscore_cutoff=200,updowncontrasts=F){
+upsetlister=function(slicenrichrlist,refcompounds=NULL,direction=NULL, combscore_cutoff=200){
   drugnames=gsub('\\.','_',gsub('.*_','',gsub('_[^_]*$','',colnames(as.data.frame(slicenrichrlist[[1]])))))
-  if (!updowncontrasts) {
-    if (is.null(direction)) {ds=c('complete','up','down')}
-    else {ds=tolower(direction)
-    while (sum(grepl(ds, c('complete','up','down'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: complete/up/down?')))}
-    }}else if (updowncontrasts) {
-      if (is.null(direction)) {ds=c('up_down','down_up')}
-      else {ds=tolower(direction)
-      while (sum(grepl(ds, c('up_down','down_up'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: up_down/down_up?')))}
-      }}
+  if (is.null(direction)) {ds=c('complete','up','down')}
+  else {ds=tolower(direction)
+  while (sum(grepl(ds, c('complete','up','down'),ignore.case=T))==0) { ds=tolower(as.character(readline(prompt='Please check out misspelling, if any: complete/up/down?')))}}
   resp='y'
   if (is.null(refcompounds)) {refcompounds=as.character(readline(prompt='Please provide a valid compound name from the list: '))
   while (sum(grepl(paste(refcompounds,collapse="|"), drugnames,ignore.case=T))==0) { refcompounds=as.character(readline(prompt='Please recheck the compound names, and provide the name of the first compound \n Do not worry about capital letters, time/conc of exposures: '))}
@@ -516,7 +629,7 @@ upsetlister=function(slicenrichrlist,refcompounds=NULL,direction=NULL, combscore
   upsetlist=list();
   for(d in ds){tmp=as.data.frame(slicenrichrlist[names(slicenrichrlist)%in%d][[1]])
   ind=which(grepl(paste(refcompounds,collapse="|"), colnames(tmp),ignore.case=T))
-  if (!updowncontrasts) {colnames(tmp)[ind]=paste0(colnames(tmp[,ind]),'_',d)}
+  colnames(tmp)[ind]=paste0(colnames(tmp[,ind]),'_',d)
   for (i in ind) {comp=list(rownames(tmp[tmp[,i]>log2(combscore_cutoff),]))
   names(comp)=colnames(tmp)[i]
   upsetlist=append(upsetlist, comp)
@@ -576,7 +689,7 @@ return(qs)}
 
 #upsetlistlegend creates the upsetplots with appropriate legend annotations that are defined by the users' querylists.
 ##In addition, pathways of interests and their respective genes from CMap/iLINCS studies are extracted in excel sheets to the working directory. Maximum total numbers of pathway terms in the querylists (npathways arguement) are defaulted to 50 to prevent overcrowding the upsetplot figure while the full range of pathways between the queries are still accessible within the output excel sheet. 
-upsetlistlegend=function(upsetlist, querylist, enrichrlist,outputlist=NULL,colorpal=NULL, ylabel='No. of Pathways', cell_line='NA',combscore_cutoff='NA',enrichmentdb=NULL,refcompounds=NULL,upsetFigure=T,enrichmentTOOL,repositoryName='iLINCS', npathways=50){
+upsetlistlegend=function(upsetlist, querylist, enrichrlist,outputlist=NULL,colorpal=NULL, ylabel='No. of Pathways', cell_line='NA',combscore_cutoff=200,enrichmentdb=NULL,refcompounds=NULL,upsetFigure=T,enrichmentTOOL,repositoryName='iLINCS', npathways=50){
   require(stringr)
   require(Vennerable)
   require(RColorBrewer)
@@ -630,30 +743,30 @@ upsetlistlegend=function(upsetlist, querylist, enrichrlist,outputlist=NULL,color
 }
 
 #Adopted function (reference needed)
-freqfunc2 <- function(x, n=30){
-  tail(sort(table( unlist(strsplit(c(na.omit(as.character(unlist(x, use.names=FALSE)))), ";",fixed = T)))), n)
+freqfunc2=function(x, n=30){
+  tail(sort(table( unlist(strsplit(c(na.omit(as.character(unlist(x, use.names=FALSE)))), ";",fixed=T)))), n)
 }
 
 #Adopted function (reference needed)
-strsplit2 <- function(x,
-                     split,
-                     type = "remove",
-                     perl = FALSE,
-                     ...) {
-  if (type == "remove") {
+strsplit2=function(x,
+                      split,
+                      type="remove",
+                      perl=FALSE,
+                      ...) {
+  if (type=="remove") {
     # use base::strsplit
-    out <- base::strsplit(x = x, split = split, perl = perl, ...)
-  } else if (type == "before") {
+    out=base::strsplit(x=x, split=split, perl=perl, ...)
+  } else if (type=="before") {
     # split before the delimiter and keep it
-    out <- base::strsplit(x = x,
-                          split = paste0("(?<=.)(?=", split, ")"),
-                          perl = TRUE,
+    out=base::strsplit(x=x,
+                          split=paste0("(?<=.)(?=", split, ")"),
+                          perl=TRUE,
                           ...)
-  } else if (type == "after") {
+  } else if (type=="after") {
     # split after the delimiter and keep it
-    out <- base::strsplit(x = x,
-                          split = paste0("(?<=", split, ")"),
-                          perl = TRUE,
+    out=base::strsplit(x=x,
+                          split=paste0("(?<=", split, ")"),
+                          perl=TRUE,
                           ...)
   } else {
     # wrong type input
@@ -663,59 +776,93 @@ strsplit2 <- function(x,
 }
 
 ###pairs with p-val (imported function (Michael Love)). Online link is needed for reference
-cols_BR = brewer.pal(11, "RdBu")   # goes from red to white to blue
-pal = colorRampPalette(cols_BR)
-cor_colors = data.frame(correlation = seq(-1,1,0.01),
-                        correlation_color = pal(201)[1:201])  # assigns a color for each r correlation value
-cor_colors$correlation_color = as.character(cor_colors$correlation_color)
+library(RColorBrewer)
+cols_BR=brewer.pal(11, "RdBu")   # goes from red to white to blue
+pal=colorRampPalette(cols_BR)
+cor_colors=data.frame(correlation=seq(-1,1,0.01),
+                        correlation_color=pal(201)[1:201])  # assigns a color for each r correlation value
+cor_colors$correlation_color=as.character(cor_colors$correlation_color)
 
-panel.cor <- function(x, y, digits=2, cex.cor)
+panel.cor=function(x, y, digits=2, cex.cor)
 {
-  par(usr = c(0, 1, 0, 1))
-  u <- par('usr')
-  names(u) <- c("xleft", "xright", "ybottom", "ytop")
-  r <- cor(x, y,method="pearson",use="complete.obs")
-  test <- cor.test(x,y)
-  bgcolor = cor_colors[2+(-r+1)*100,2]    # converts correlation into a specific color
-  do.call(rect, c(col = bgcolor, as.list(u))) # colors the correlation box
+  par(usr=c(0, 1, 0, 1))
+  u=par('usr')
+  names(u)=c("xleft", "xright", "ybottom", "ytop")
+  r=cor(x, y,method="pearson",use="complete.obs")
+  test=cor.test(x,y)
+  bgcolor=cor_colors[2+(-r+1)*100,2]    # converts correlation into a specific color
+  do.call(rect, c(col=bgcolor, as.list(u))) # colors the correlation box
 
   if (test$p.value> 0.05){
     text(0.5,0.5,"Insignificant",cex=1.5)
   } else{
     text(0.5, 0.75, paste("r=",round(r,2)),cex=2.5) # prints correlatoin coefficient
-    text(.5, .25, paste("p=",formatC(test$p.value, format = "e", digits = 1)),cex=2)
-    abline(h = 0.5, lty = 2) # draws a line between correlatoin coefficient and p value
+    text(.5, .25, paste("p=",formatC(test$p.value, format="e", digits=1)),cex=2)
+    abline(h=0.5, lty=2) # draws a line between correlatoin coefficient and p value
   }
 
 }
-panel.smooth<-function (x, y, col = "black", bg = NA, pch = 19, cex = 1.2,
-                        col.smooth = "blue", span = 2/3, iter = 3, ...) {
-  points(x, y, pch = pch, col = col, bg = bg, cex = cex)
-  ok <- is.finite(x) & is.finite(y)
+panel.smooth=function (x, y, col="black", bg=NA, pch=19, cex=1.2,
+                        col.smooth="blue", span=2/3, iter=3, ...) {
+  points(x, y, pch=pch, col=col, bg=bg, cex=cex)
+  ok=is.finite(x) & is.finite(y)
   if (any(ok))
-    abline(lm(y~x), lwd=2.5, col = col.smooth, ...)
+    abline(lm(y~x), lwd=2.5, col=col.smooth, ...)
 }
-panel.hist <- function(x, ...)
+panel.hist=function(x, ...)
 {
-  usr <- par("usr"); on.exit(par(usr))
-  par(usr = c(usr[1:2], 0, 1.5) )
-  h <- hist(x, plot = FALSE)
-  breaks <- h$breaks; nB <- length(breaks)
-  y <- h$counts; y <- y/max(y)
+  usr=par("usr"); on.exit(par(usr))
+  par(usr=c(usr[1:2], 0, 1.5) )
+  h=hist(x, plot=FALSE)
+  breaks=h$breaks; nB=length(breaks)
+  y=h$counts; y=y/max(y)
   rect(breaks[-nB], 0, breaks[-1], y, col="cyan", ...)
 }
 
 # bind Ensembl ID to results and name the columns (imported function (Michael Love)). Online link is needed for reference
-convertIDs <- function( ids, from, to, db, ifMultiple=c("putNA", "useFirst")) {
+convertIDs=function( ids, from, to, db, ifMultiple=c("putNA", "useFirst")) {
   stopifnot( inherits( db, "AnnotationDb" ) )
-  ifMultiple <- match.arg( ifMultiple )
-  suppressWarnings( selRes <- AnnotationDbi::select(
+  ifMultiple=match.arg( ifMultiple )
+  suppressWarnings( selRes=AnnotationDbi::select(
     db, keys=ids, keytype=from, columns=c(from,to) ) )
-  if ( ifMultiple == "putNA" ) {
-    duplicatedIds <- selRes[ duplicated( selRes[,1] ), 1 ]
-    selRes <- selRes[ ! selRes[,1] %in% duplicatedIds, ]
+  if ( ifMultiple=="putNA" ) {
+    duplicatedIds=selRes[ duplicated( selRes[,1] ), 1 ]
+    selRes=selRes[ ! selRes[,1] %in% duplicatedIds, ]
   }
   return( selRes[ match( ids, selRes[,1] ), 2 ] )
 }
 
 
+
+## Modified plotPCA from DESeq2 package. Shows the Names of the Samples (the first col of SampleTable), and uses ggrepel pkg to plot them conveniently.
+# @SA 10.02.2017
+library(genefilter)
+library(ggplot2)
+library(ggrepel)
+
+plotPCA.san=function (object, intgroup="condition", ntop=500, returnData=FALSE, PCno1=1, PCno2=2)
+{
+  rv=rowVars(assay(object))
+  select=order(rv, decreasing=TRUE)[seq_len(min(ntop,
+                                                     length(rv)))]
+  pca=prcomp(t(assay(object)[select, ]))
+  percentVar=pca$sdev^2/sum(pca$sdev^2)
+  if (!all(intgroup %in% names(colData(object)))) {
+    stop("the argument 'intgroup' should specify columns of colData(dds)")
+  }
+  intgroup.df=as.data.frame(colData(object)[, intgroup, drop=FALSE])
+  group=if (length(intgroup) > 1) {
+    factor(apply(intgroup.df, 1, paste, collapse=" : "))
+  }
+  else {
+    colData(object)[[intgroup]]
+  }
+  d=data.frame(PC1=pca$x[, PCno1], PC2=pca$x[, PCno2], group=group,
+                  intgroup.df, name=colData(rld)[,1])
+  if (returnData) {
+    attr(d, "percentVar")=percentVar
+    return(d)
+  }
+  ggplot(data=d, aes_string(x=paste0("PC", as.character(PCno1)), y=paste0("PC", as.character(PCno2)), color="group", label="name")) + geom_point(size=3) + xlab(paste0("PC1: ", round(percentVar[1] * 100), "% variance")) + ylab(paste0("PC2: ", round(percentVar[2] * 100), "% variance")) + coord_fixed() + geom_text_repel(size=3)
+
+}
