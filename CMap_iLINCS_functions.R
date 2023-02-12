@@ -38,9 +38,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
     dataset=read.csv(i,header=T,sep="\t")[,c("Name", "Type","Score")]
     colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
     dataset$Name=gsub(x=dataset$Name, pattern="[[:punct:]]", replacement="_")
-    # dataset=dataset[dataset$Type%in%typewise,]
     dataset$Name_type=paste0(dataset$Name,"_",dataset$Type);
-    # dataset$Name_type=gsub(' ','_',dataset$Name_type)
     dataset$Name=NULL; dataset$Type=NULL
     dataset=dataset %>% group_by(Name_type) %>% summarise_all(funs(mean))
   }
@@ -49,8 +47,6 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
       colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
       temp_dataset$Name=gsub(x=temp_dataset$Name, pattern="[[:punct:]]", replacement="_")
       temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Type);
-      # temp_dataset=temp_dataset[temp_dataset$Type%in%typewise,]
-      # temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
       temp_dataset$Name=NULL; temp_dataset$Type=NULL
       temp_dataset=temp_dataset %>% group_by(Name_type) %>% summarise_all(funs(mean))
       if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
@@ -114,7 +110,6 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
     
     #heatmaps
     if (heatmap_outputs) {
-      require(magick)
       tmp2=as.data.frame(tmp)
       tmp2=as.data.frame.matrix(tmp[rowSums(abs(tmp)>cmaprank_cutoff)>=1,])
       col_paths2=rep('black',nrow(tmp2))
@@ -131,51 +126,6 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
       # rm(ind); rm(pathways); rm(tmp)
     }
     rm(tmp)}
-  
-  # if (sum(typewise%in%'cp')==0) {for (i in files) {  if (!exists("dataset")){
-  #   dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
-  #   colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-  #   dataset=dataset[dataset$Type%in%typewise,]
-  #   dataset$Name_type=paste0(dataset$Name,"_",dataset$Type);
-  #   dataset$Name_type=gsub(' ','_',dataset$Name_type)
-  #   dataset$Name=NULL; dataset$Type=NULL
-  # }
-  #   if (exists("dataset")){
-  #     temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
-  #     colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-  #     temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Type);
-  #     temp_dataset=temp_dataset[temp_dataset$Type%in%typewise,]
-  #     temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
-  #     temp_dataset$Name=NULL; temp_dataset$Type=NULL
-  #     if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
-  #       dataset=merge(dataset, temp_dataset, by="Name_type",all=T)}
-  #       rm(temp_dataset)
-  #   }}} else {for (i in files) {
-  # 
-  #     if (!exists("dataset")){
-  #       dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score",'Description')]
-  #       colnames(dataset)[colnames(dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-  #       dataset=dataset[dataset$Type=='cp',]
-  #       dataset$Name_type=paste0(dataset$Name,"_",dataset$Description);
-  #       dataset$Name_type=gsub(' ','_',dataset$Name_type)
-  #       dataset$Name=NULL; dataset$Type=NULL; dataset$Description=NULL
-  #     }
-  #     if (exists("dataset")){
-  #       temp_dataset=read.table(i,header=T,sep="\t")[,c("Name", "Type","Score")]
-  #       colnames(temp_dataset)[colnames(temp_dataset)=="Score"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
-  #       temp_dataset=temp_dataset[temp_dataset$Type=='cp']
-  #       temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Description);
-  #       temp_dataset$Name_type=gsub(' ','_',temp_dataset$Name_type)
-  #       temp_dataset$Name=NULL; temp_dataset$Type=NULL;dataset$Desctiption=NULL
-  #       if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
-  #       
-  #       dataset=merge(dataset, temp_dataset, by="Name_type",all=T)}
-  #       dataset=dataset
-  #       rm(temp_dataset)
-  #     }}}
-  # dataset=dataset[,-2]
-  # colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
-  # colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
   
   #Retrieve the data for kd/oe experiments only to process further with gene enrichment analyses
   dataset=dataset[grepl(x=rownames(dataset),paste0("^.+_(kd|oe)$")),]
