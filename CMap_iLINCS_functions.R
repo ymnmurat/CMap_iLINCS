@@ -12,6 +12,7 @@
 
 connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman', cmaprank_cutoff=98, cor_outputs=F, heatmap_outputs=F, width_heat=18, height_heat=12, res_heat=300){
   fullds=c('kd','oe','cp','cc')
+  #Confirm input parameters and update when needed
   if(is.null(ptrn)){pattern='_conn_HA1E_'
   }else {pattern=ptrn
   while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
@@ -33,6 +34,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
   while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
   }}
  
+  #compile files in the cmap directory (data is derived from CMap connections in the .txt format)
   files=list.files(pattern=pattern)
   for (i in files) {if (!exists("dataset")){
     dataset=read.csv(i,header=T,sep="\t")[,c("Name", "Type","Score")]
@@ -62,6 +64,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
   cpcc=which(typewise%in%c('cp', 'cc'))
   kdoe=which(typewise%in%c('kd','oe'))
   
+  #Iterate through connectivity types (kd, oe, cp, cc) and produce correlation plots/heatmaps for each separately
   for (ds in typewise) {
     require(strex)
     tmp=dataset[grepl(x=rownames(dataset),paste0("^.+_", ds,"$")),]
@@ -70,7 +73,6 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
     if (ds %in% typewise[cpcc]) {
       rownames(tmp)=strex::str_before_last(pattern = paste0('_',ds),string = rownames(tmp)) 
     }
-    # tmp=tmp[rowSums(abs(tmp)>cpccthreshold)>=1,]
     plotlab=''
     if (ds=='cp') {plotlab='ConnectivityMap matching compounds'
     } else if (ds=='cc') {plotlab='ConnectivityMap matching compound classes'
@@ -78,7 +80,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
     } else if (ds=='oe') {plotlab='ConnectivityMap gene over-expression matches'
     }
     
-    #corplot
+    #corplots. Correlation plots take full list of connections into account when comparing different samples
     cormat_go=signif(cor(tmp,method=cormethod),2)
     proco=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
     antico_thr=c('Warfarin','APIXABAN','Dabigatran', 'argatroban', 'skatole', 'phenindione')
@@ -108,7 +110,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
       corrplots[[k]]=tmpfig
       dev.off()}
     
-    #heatmaps
+    #heatmaps. Heatmaps evaluate the connections that are above an absolute threshold in at least one of the samples
     if (heatmap_outputs) {
       tmp2=as.data.frame(tmp)
       tmp2=as.data.frame.matrix(tmp[rowSums(abs(tmp)>cmaprank_cutoff)>=1,])
