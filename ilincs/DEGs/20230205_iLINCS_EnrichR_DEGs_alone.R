@@ -50,6 +50,7 @@ kegg_mestwar2=slicenricher(enrichrlist = keggtr,combscore_cutoff = 100,refcompou
 updownfunk=slicenricher_updown(enrichrlist = keggtr,combscore_cutoff = 100)
 # updownfunk=slicenricher_updown(enrichrlist = keggtr,combscore_cutoff = 100,contr1 = 'menadione', contr2 = c('warfarin', 'dabigatran'), classContr1 = 'Pro-coagulants',classContr2 = 'Anti-coagulants',enrichmentdb = 'KEGG',repositoryName = 'iLINCS')
 
+                                  
 #Prepare data for upsetplot representations to see overlaps and contrasts between compounds' pathway enrichment profiles. Upsetplots allow nice representations when comparing more than 4 samples. It can still get overcrowded though. Hence, it would still be a good practice to keep the numbers of samples minimal (5-8)
 KEGG_upsetlist=upsetlister(slicenrichrlist = kegg_mestwar2, combscore_cutoff = 100,refcompounds = drug_list2)
 
