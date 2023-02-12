@@ -18,7 +18,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
   
   resp='y'
   if (is.null(types)) {typewise=c('kd','oe')
-  }  else {typewise=tolower(types)
+  }  else {typewise=unique(tolower(types))
   if (sum(tolower(typewise) %in% fullds)!=length(typewise)) {typewise=fullds[which(fullds%in%typewise)]
     print('Warning: One or more types arguement is missing. Calculation will be continued with the correct arguements available.')
   }}
