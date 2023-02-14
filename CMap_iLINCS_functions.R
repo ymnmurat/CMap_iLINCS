@@ -21,19 +21,19 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
   if (is.null(types)) {typewise=c('kd','oe')
   }  else {typewise=unique(tolower(types))
   if (sum(tolower(typewise) %in% fullds)!=length(typewise)) {typewise=fullds[which(fullds%in%typewise)]
-    print('Warning: One or more types arguement is missing. Calculation will be continued with the correct arguements available.')
+  print('Warning: One or more types arguement is missing. Calculation will be continued with the correct arguements available.')
   }}
   while (sum(tolower(typewise) %in% fullds)==0) { 
     typewise=tolower(as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  ')))
-  resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))
-  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
-  while (resp!='n') {nextype=tolower(as.character(readline(prompt='Name of the next connectivity types: ')))
-  while (sum(tolower(nextype) %in% fullds)==0) { nextype=as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  '))}
-  typewise=tolower(unique(append(typewise, nextype)))
-  resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))
-  while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
-  }}
- 
+    resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))
+    while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
+    while (resp!='n') {nextype=tolower(as.character(readline(prompt='Name of the next connectivity types: ')))
+    while (sum(tolower(nextype) %in% fullds)==0) { nextype=as.character(readline(prompt='Please check out misspelling, if any: knockdown (kd)/overexpression (oe) / compound (cp) / CMap Class (cc)?  '))}
+    typewise=tolower(unique(append(typewise, nextype)))
+    resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))
+    while (!resp %in% c('y','n')) { resp=tolower(as.character(readline(prompt='Wanna add more connectivity types: yes (Y) / no (N)   ')))}
+    }}
+  
   #compile files in the cmap directory (data is derived from CMap connections in the .txt format)
   files=list.files(pattern=pattern)
   for (i in files) {if (!exists("dataset")){
@@ -51,7 +51,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
       temp_dataset$Name_type=paste0(temp_dataset$Name,"_",temp_dataset$Type);
       temp_dataset$Name=NULL; temp_dataset$Type=NULL
       temp_dataset=temp_dataset %>% group_by(Name_type) %>% summarise_all(funs(mean))
-      if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+      if (sum(colnames(temp_dataset)%in%colnames(dataset))!=ncol(temp_dataset)) {
         dataset=merge(dataset, temp_dataset, by="Name_type",all=T)}
       rm(temp_dataset)
     }}
@@ -82,9 +82,9 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
     
     #corplots. Correlation plots take full list of connections into account when comparing different samples
     cormat_go=signif(cor(tmp,method=cormethod),2)
-    proco=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
-    antico_thr=c('Warfarin','APIXABAN','Dabigatran', 'argatroban', 'skatole', 'phenindione')
-    proco_thr=c("heparin","thrombin",'phylloquinone', 'menadione','desmopressin')
+    proco=c("thrombin",'phylloquinone', 'menadione','desmopressin')
+    antico_thr=c("heparin",'Warfarin','APIXABAN','Dabigatran', 'argatroban', 'skatole', 'phenindione')
+    proco_thr=c("thrombin",'phylloquinone', 'menadione','desmopressin')
     bloods=c('blood', 'thromb', 'agula', 'erythroc', 'leukoc', 'arteri','vein ', 'vascular')
     
     corrplots=list()
@@ -132,7 +132,9 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
   #Retrieve the data for kd/oe experiments only to process further with gene enrichment analyses
   dataset=dataset[grepl(x=rownames(dataset),paste0("^.+_(kd|oe)$")),]
   return(dataset)
+  rm( list=Filter( exists, c('dataset','typewise', 'pattern','ds') ) )
 }
+
 
 ##iLINCS_kd_connectivitydatafile_compiler: Similar to connectivitydatafile_compiler function, and compiles data from iLINCS instead.
 ##Further developments by online queries are needed. So that, connectivity information would be collected for specified compounds.
@@ -154,19 +156,19 @@ iLINCS_kd_connectivitydatafile_compiler=function(ptrn=NULL){
       temp_dataset$zScore=temp_dataset$zScore*as.numeric(temp_dataset$Correlation)
       colnames(temp_dataset)[colnames(temp_dataset)=="zScore"]=sub(".[^.]*$", "",sub(paste0(".*\\",pattern),"",i));
       temp_dataset$Correlation=NULL
-      if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+      if (sum(colnames(temp_dataset)%in%colnames(dataset))!=ncol(temp_dataset)) {
         dataset=merge(dataset, temp_dataset, by="GeneTarget",all=T)
       }
       rm(temp_dataset)
     }}
-  # dataset=dataset[,-2]
-  # colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
-  # colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
+
   dataset=dataset[!duplicated(dataset),]
+  dataset[is.na(dataset)]=0
   rownames(dataset)=dataset$Name
   #replace special characters with underscore to avoid further issues
   colnames(dataset)=gsub(x=colnames(dataset), pattern="[[:punct:]]", replacement="_")
   return(dataset)
+  rm( list=Filter(exists, c('dataset','pattern')))
 }
 
 ##iLINCS_kd_connectivitydatafile_compiler: Similar to connectivitydatafile_compiler function, and compiles data from iLINCS instead.
@@ -187,34 +189,117 @@ iLINCS_DEGdata_compiler=function(ptrn=NULL){
       colnames(temp_dataset)[colnames(temp_dataset)=="Value_LogDiffExp"]=sub(".xls", "_logDE",sub(paste0(".*\\",pattern),"",i));
       colnames(temp_dataset)[colnames(temp_dataset)=="Significance_pvalue"]=sub(".xls", "_pval",sub(paste0(".*\\",pattern),"",i));
       colnames(temp_dataset)[colnames(temp_dataset)=='Name_GeneSymbol']='Genes'
-      if (!sum(colnames(temp_dataset)%in%colnames(dataset))==ncol(temp_dataset)) {
+      if (sum(colnames(temp_dataset)%in%colnames(dataset))!=ncol(temp_dataset)) {
         dataset=merge(dataset, temp_dataset, by="Genes",all=T)
       }
       rm(temp_dataset)
     }}
-  # dataset=dataset[,-2]
-  # colnames(dataset)[grepl('\\.y',colnames(dataset))]=gsub('\\.y','',colnames(dataset)[grepl('\\.y',colnames(dataset))])
-  # colnames(dataset)[grepl('\\.',colnames(dataset))]=gsub('\\.','_',colnames(dataset)[grepl('\\.',colnames(dataset))])
-  # dataset=dataset[!duplicated(dataset),]
-  # rownames(dataset)=dataset$Name
-
+  
   rownames(dataset)=dataset$Genes; dataset$Genes=NULL
   #replace special characters with underscore to avoid further issues
   colnames(dataset)=gsub(x=colnames(dataset), pattern="[[:punct:]]", replacement="_")
   return(dataset)
+  rm(list=Filter(exists, c('dataset', 'pattern')))
 }
 
-if (exists('dataset')) {rm(dataset)}
-files=list.files(pattern="iLINCS_complete_HA")
-for (i in files) {
+##swisstargetdatafile_compiler: Compiles SwissTargetPrediction derived data (.xlsx). Currently, it works locally and utilizes names of the downloaded files to parse through. Each input file has a first row which is omitted by the startRow arguement. 
+##If the input file is manually modified, you may need to change this arguement. Main output file contains gene connectivity data from knock-down/over-expression studies. 
+##In addition, targetscore_cutoff argument inherits a threshold for filtering data where each target and for any compound should meet a certain minimum value (it is 0.5 by default here)
+##If you have a group of compounds to focus and see how the data from rest aligns with them, you can change the focused argument to TRUE, specify a set of compounds (by focuscandies arguement), and further check on the focuscandiesThreshold value to change the resolution based on the focused compounds
+##Future formats can include a logical variable whether the data should be accessed locally or from SwissTargetPrediction directly.
+##Although slightly slow for a long range of compounds, SwissSimilarity tool from the same platform has a curl and bash based accession pipeline. It would be worthwhile to check
 
-  if (!exists("dataset")){
-
+swisstargetdatafile_compiler=function(ptrn=NULL,startRow=2, targetscore_cutoff=0.5, focused=F, focuscandies=NULL, focuscandiesThreshold=0.2,heatmap_outputs=F, clustering_method='ward.D',width_heat=18, height_heat=18, res_heat=300){
+  require(openxlsx)
+  require(ComplexHeatmap)
+  require(dplyr)
+  require(RColorBrewer); require(circlize)
+  #Confirm input parameters and update when needed
+  if(is.null(ptrn)){pattern='SwissTargetPrediction_'
+  }else {pattern=ptrn
+  while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
+  
+  dataset=data.frame();rm(dataset)
+  #compile files in the swisstarget directory (data is derived from SwissTargetPrediction in the .xlsx format)
+  files=list.files(pattern=ptrn)
+  
+  for (i in files) {  
+    
+    if (!exists("dataset")){
+      dataset=read.xlsx(i,startRow = startRow)[,c("Target", "Probability*")]
+      colnames(dataset)[colnames(dataset)=="Probability*"] = sub(".xlsx", "",sub(pattern,"",i));
+      dataset_info=read.xlsx(i,startRow = startRow)[,c('Target',"Common.name")]
+    }
+    if (exists("dataset")){
+      temp_dataset=read.xlsx(i,startRow = startRow)[,c("Target", "Probability*")]
+      colnames(temp_dataset)[colnames(temp_dataset)=="Probability*"] = sub(".xlsx", "",sub(pattern,"",i));
+      if (sum(colnames(temp_dataset)%in%colnames(dataset))!=ncol(temp_dataset)) {
+        dataset=merge(dataset, temp_dataset, by="Target",all=T)
+      }
+      temp_dataset_info=read.xlsx(i,startRow = startRow)[,c('Target',"Common.name")]
+      dataset_info=rbind(dataset_info,temp_dataset_info)
+      rm(temp_dataset);rm(temp_dataset_info)
+    }
+    
   }
-  if (exists("dataset")){
-
+  
+  dataset_info=dataset_info[!duplicated(dataset_info),]
+  dataset=dataset[,!duplicated(colnames(dataset))]
+  dataset[is.na(dataset)]=0
+  dataset=dataset[!duplicated(dataset),]
+  rownames(dataset)=dataset$Target
+  dataset$Target=NULL
+  ##get the targets that have at least some considerable score for at least one of the compounds
+  dataset=dataset[rowSums(dataset>targetscore_cutoff)>=1,]
+  dataset=as.matrix.data.frame(dataset)
+  colnames(dataset)=gsub('_iso','',colnames(dataset))
+  colnames(dataset)=tolower(colnames(dataset))
+  
+  if (focused) {
+    if (is.null(focuscandies)) {focuscandies=colnames(dataset)
+    }  else {focuscandies=unique(tolower(focuscandies))
+    if (sum(tolower(focuscandies) %in% colnames(dataset))!=length(focuscandies)) {focuscandies=colnames(dataset)[which(colnames(dataset)%in%focuscandies)]
+    print('Warning: One or more focuscandies arguement is missing. Calculation will be continued with the correct arguements available.')
+    }}
+    if (sum(tolower(focuscandies) %in% colnames(dataset))==0) {
+      print('Warning: Focuscandies arguement does not match with the query compounds. Calculations will be continued for the whole data')
+      focuscandies=colnames(dataset)}
+    
+    dataset=as.data.frame(dataset)
+    dataset[rowSums(dataset[which(colnames(dataset)%in%focuscandies)])>focuscandiesThreshold,]}
+  
+  dataset=as.data.frame(dataset)
+  dataset$Target=rownames(dataset)
+  dataset=merge(dataset, dataset_info, by='Target', all.x=T)
+  
+  #remove homologous genes to avoid matching row names in the next steps
+  dataset=dataset[!grepl('by homology', dataset$Target),]
+  dataset$Target=NULL
+  rownames(dataset)=dataset$Common.name; dataset$Common.name=NULL
+  dataset=as.matrix.data.frame(dataset)
+  
+  if (heatmap_outputs) {
+    heatmaps=list()
+    cols <- rep('black', ncol(dataset))
+    #turn red the specified rows in tf
+    proco=c("thrombin",'phylloquinone', 'menadione','desmopressin')
+    cols[colnames(dataset)%in%proco]= 'red4'
+    
+    lgd_list=Legend(labels = c("Pro-coagulants", "Anti-coagulants"), title = "Compound types", type = "points", pch = 18, legend_gp = gpar(col = c("red4","black"), fontsize=24))
+    f1 = colorRamp2(seq(max(dataset), min(dataset), length=5), c("dark red","red3","red2","red","white"))
+    
+    jpeg(paste0(gsub('-','',Sys.Date()),'_SwissTarget_ProAntiCoagulants_threshold',targetscore_cutoff,'_Heatmap_',clustering_method,'.jpeg'), units="in", width=width_heat, height=height_heat, res=res_heat)
+    
+    ht=Heatmap(dataset,clustering_method_rows = clustering_method,clustering_method_columns  = clustering_method, col = f1, name = "SwissTarget similarity scores", row_names_gp = gpar(fontsize = max(10-nrow(dataset)*0.05,2), fontface = "bold"),column_names_gp = gpar(fontsize = 12, fontface = "bold",col=cols),
+               heatmap_legend_param=list(color_bar="continuous",legend_direction="horizontal",grid_height = unit(0.8, "cm"),legend_width = unit(10, "cm"),labels_gp = gpar(fontsize = 15),title_gp = gpar(fontsize = 15, fontface = "bold"),title_position = "topcenter"), border = T)
+    tmpheat=draw(ht, heatmap_legend_side = "top",  column_title_gp=gpar(fontface="bold", line = 5),annotation_legend_list = lgd_list,annotation_legend_side = "bottom")
+    heatmaps[['Heatmap']]=tmpheat
+    dev.off()
   }
-
+  
+  #Retrieve the data for kd/oe experiments only to process further with gene enrichment analyses
+  return(dataset)
+  rm( list=Filter( exists, c('dataset','temp_dataset','focuscandies', 'pattern') ) )
 }
 
 #" enrichr_output: Retrieves EnrichR results. It requires a vector of drug list, p-value cut off, name of the database used (kegg="KEGG_2019_Human","GO_Biological_Process_2018" (see EnrichR sources)),
