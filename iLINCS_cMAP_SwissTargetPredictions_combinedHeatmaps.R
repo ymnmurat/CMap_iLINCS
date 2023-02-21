@@ -7,7 +7,7 @@
 rm(list=ls())
 gc()
 
-suppressPackageStartupMessages(source('20230221_mylib_functions.R'))
+suppressPackageStartupMessages(source('CMap_iLINCS_SwissTarget_functions.R'))
 
 #Let's test our swisstargetdatafile_compiler() function. It mainly: 
 # (i) gathers the SwissTargetPrediction derived data (.xlsx) together, 
