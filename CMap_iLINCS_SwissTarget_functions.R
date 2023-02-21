@@ -384,7 +384,7 @@ multi_heatmaps_SwissCMapILINCS=function(swisstargetDir='swisstarget', iLINCSconn
   #set and change current directory to main github/cmap_ilincs folder 
   currentdir=getwd()
   # setwd(gsub(x=currentdir,pattern = '(github_stuff).*','\\1'))
-  setwd(gsub(x=currentdir,pattern = '(github/cmap_ilincs).*','\\1'))
+  setwd(gsub(x=currentdir,pattern = '(ymnmurat/CMap_iLINCS).*','\\1'))
   #SwissTargetPrediction collections
   require(ComplexHeatmap)
   require(dplyr)
@@ -588,7 +588,7 @@ multi_heatmaps_SwissCMapILINCS=function(swisstargetDir='swisstarget', iLINCSconn
   
   # Change directory to keep the heatmap figures which will not overwrite one another
   # setwd(gsub(x=currentdir,pattern = '(github_stuff).*','\\1'))
-  setwd(gsub(x=currentdir,pattern = '(github/cmap_ilincs).*','\\1')) 
+  setwd(gsub(x=currentdir,pattern = '(ymnmurat/CMap_iLINCS).*','\\1')) 
   filenames=paste0(gsub('-','',Sys.Date()),'_',paste0(c(CellLine,secondCellLine), collapse = '_'),ifelse(is.null(ha),'','_Annotated'),'_CombinedHeatmaps_1.jpeg')
   while (file.exists(filenames)) {
     filenames=paste0(gsub('_[^_]*$', '', filenames),'_', as.numeric(gsub('\\.jpeg','',gsub("^.+_", "", filenames)))+1,'.jpeg')
