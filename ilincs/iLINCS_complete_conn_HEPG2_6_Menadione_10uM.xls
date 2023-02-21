@@ -1,0 +1,233 @@
+GeneTarget	Pathways	Correlation	NoOfSignatures	pValue	zScore
+PTMS		+	8	5.959681082e-16	8.005281574
+WARS2	Aminoacyl-tRNA biosynthesis	+	9	3.411719613e-14	7.491223721
+CSNK1E	FoxO signaling pathway | Wnt signaling pathway | Hedgehog signaling pathway | Hippo signaling pathway | Hippo signaling pathway - multiple species | Circadian rhythm	+	13	1.352041241e-13	7.308367079
+KIF11		+	10	1.9866503e-13	7.256467528
+NKX2-3		+	9	1.021019997e-12	7.031582544
+IL4R	Cytokine-cytokine receptor interaction | PI3K-Akt signaling pathway | JAK-STAT signaling pathway | Hematopoietic cell lineage | Th1 and Th2 cell differentiation | Th17 cell differentiation | Pathways in cancer | Inflammatory bowel disease (IBD)	+	13	2.056498241e-11	6.599948855
+DHRS7		+	14	1.674202588e-10	6.281723253
+STAT1	Chemokine signaling pathway | Necroptosis | Osteoclast differentiation | Toll-like receptor signaling pathway | NOD-like receptor signaling pathway | C-type lectin receptor signaling pathway | JAK-STAT signaling pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | Prolactin signaling pathway | Thyroid hormone signaling pathway | AGE-RAGE signaling pathway in diabetic complications | Leishmaniasis | Toxoplasmosis | Tuberculosis | Hepatitis C | Hepatitis B | Measles | Influenza A | Human papillomavirus infection | Kaposi sarcoma-associated herpesvirus infection | Herpes simplex virus 1 infection | Epstein-Barr virus infection | Pathways in cancer | Pancreatic cancer | Inflammatory bowel disease (IBD)	+	16	6.298087531e-10	6.072464755
+COPS2		+	8	6.584629649e-10	6.065318281
+RUVBL2		+	9	8.165665147e-10	6.030638337
+PSMA3	Proteasome	+	9	2.79187785e-9	5.828769525
+SNAPC1		+	8	2.849961234e-9	5.825331848
+PSMB7	Proteasome	+	8	1.049385866e-8	5.603655896
+TNFRSF14	Cytokine-cytokine receptor interaction | Herpes simplex virus 1 infection	+	8	6.200535446e-8	5.287483255
+DHX29		+	13	8.580978894e-8	5.227713061
+C19ORF6	NA	+	8	9.218396507e-8	5.214445466
+ZNF263		+	9	9.569242783e-8	5.20751647
+KRAS	MAPK signaling pathway | ErbB signaling pathway | Ras signaling pathway | Rap1 signaling pathway | Chemokine signaling pathway | FoxO signaling pathway | Sphingolipid signaling pathway | Phospholipase D signaling pathway | Mitophagy - animal | Autophagy - animal | mTOR signaling pathway | PI3K-Akt signaling pathway | Apoptosis | Longevity regulating pathway | Longevity regulating pathway - multiple species | Cellular senescence | Axon guidance | VEGF signaling pathway | Apelin signaling pathway | Gap junction | Signaling pathways regulating pluripotency of stem cells | C-type lectin receptor signaling pathway | Natural killer cell mediated cytotoxicity | T cell receptor signaling pathway | B cell receptor signaling pathway | Fc epsilon RI signaling pathway | Thermogenesis | Long-term potentiation | Neurotrophin signaling pathway | Cholinergic synapse | Serotonergic synapse | Long-term depression | Regulation of actin cytoskeleton | Insulin signaling pathway | GnRH signaling pathway | Progesterone-mediated oocyte maturation | Estrogen signaling pathway | Melanogenesis | Prolactin signaling pathway | Thyroid hormone signaling pathway | Oxytocin signaling pathway | Relaxin signaling pathway | AGE-RAGE signaling pathway in diabetic complications | Aldosterone-regulated sodium reabsorption | Alcoholism | Hepatitis C | Hepatitis B | Human cytomegalovirus infection | Human papillomavirus infection | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Viral carcinogenesis | Proteoglycans in cancer | MicroRNAs in cancer | Colorectal cancer | Renal cell carcinoma | Pancreatic cancer | Endometrial cancer | Glioma | Prostate cancer | Thyroid cancer | Melanoma | Bladder cancer | Chronic myeloid leukemia | Acute myeloid leukemia | Non-small cell lung cancer | Breast cancer | Hepatocellular carcinoma | Gastric cancer | Central carbon metabolism in cancer | Choline metabolism in cancer	+	25	1.043778031e-7	5.191367067
+UGDH	Pentose and glucuronate interconversions | Ascorbate and aldarate metabolism | Amino sugar and nucleotide sugar metabolism	+	13	1.287079605e-7	5.152223549
+IL2RB	Cytokine-cytokine receptor interaction | Endocytosis | PI3K-Akt signaling pathway | JAK-STAT signaling pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | Measles | Human T-cell leukemia virus 1 infection | Pathways in cancer | Transcriptional misregulation in cancer	+	8	1.302291519e-7	5.150020274
+PARN	RNA degradation	+	11	1.393955471e-7	5.137247896
+PINK1	Mitophagy - animal | Parkinson disease	+	1	1.630916741e-7	5.107653931
+UBB	Mitophagy - animal | Endocytosis | Parkinson disease | Kaposi sarcoma-associated herpesvirus infection	+	8	1.82901985e-7	5.08594297
+HMMR	ECM-receptor interaction	+	8	3.514431767e-7	4.960564449
+TRPM2	NOD-like receptor signaling pathway | Oxytocin signaling pathway	+	7	4.056668498e-7	4.932621283
+SRM	Cysteine and methionine metabolism | Arginine and proline metabolism | beta-Alanine metabolism | Glutathione metabolism	+	8	7.027807263e-7	4.824214422
+PDS5A		+	11	7.063848099e-7	4.823194672
+NXF1	Ribosome biogenesis in eukaryotes | RNA transport | mRNA surveillance pathway | Influenza A | Herpes simplex virus 1 infection	+	9	8.551591441e-7	4.784947739
+GATAD1		+	8	8.587309351e-7	4.7841105
+HRAS	MAPK signaling pathway | ErbB signaling pathway | Ras signaling pathway | Rap1 signaling pathway | Chemokine signaling pathway | FoxO signaling pathway | Sphingolipid signaling pathway | Phospholipase D signaling pathway | Mitophagy - animal | Autophagy - animal | Endocytosis | mTOR signaling pathway | PI3K-Akt signaling pathway | Apoptosis | Longevity regulating pathway | Longevity regulating pathway - multiple species | Cellular senescence | Axon guidance | VEGF signaling pathway | Apelin signaling pathway | Focal adhesion | Gap junction | Signaling pathways regulating pluripotency of stem cells | C-type lectin receptor signaling pathway | JAK-STAT signaling pathway | Natural killer cell mediated cytotoxicity | T cell receptor signaling pathway | B cell receptor signaling pathway | Fc epsilon RI signaling pathway | Thermogenesis | Long-term potentiation | Neurotrophin signaling pathway | Cholinergic synapse | Serotonergic synapse | Long-term depression | Regulation of actin cytoskeleton | Insulin signaling pathway | GnRH signaling pathway | Estrogen signaling pathway | Melanogenesis | Prolactin signaling pathway | Thyroid hormone signaling pathway | Oxytocin signaling pathway | Relaxin signaling pathway | AGE-RAGE signaling pathway in diabetic complications | Alcoholism | Hepatitis C | Hepatitis B | Human cytomegalovirus infection | Human papillomavirus infection | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Viral carcinogenesis | Proteoglycans in cancer | MicroRNAs in cancer | Colorectal cancer | Renal cell carcinoma | Endometrial cancer | Glioma | Prostate cancer | Thyroid cancer | Melanoma | Bladder cancer | Chronic myeloid leukemia | Acute myeloid leukemia | Non-small cell lung cancer | Breast cancer | Hepatocellular carcinoma | Gastric cancer | Central carbon metabolism in cancer | Choline metabolism in cancer	+	13	0.000001188387603	4.718425033
+SOD1	Peroxisome | Longevity regulating pathway - multiple species | Amyotrophic lateral sclerosis (ALS) | Huntington disease | Prion diseases	+	13	0.000001356160354	4.691482805
+HPD	Ubiquinone and other terpenoid-quinone biosynthesis | Tyrosine metabolism | Phenylalanine metabolism	+	9	0.000001411540521	4.683288954
+NUCKS1		+	8	0.000001720054139	4.642624735
+ARF4		+	9	0.000001818245908	4.631144942
+HMGB1	Base excision repair | Autophagy - animal | Necroptosis	+	8	0.00000187289302	4.625010954
+GNE	Amino sugar and nucleotide sugar metabolism	+	9	0.000002443651018	4.56956816
+TSTA3	Fructose and mannose metabolism | Amino sugar and nucleotide sugar metabolism	+	13	0.000003551146595	4.490599666
+FAM104A		+	8	0.000003963641116	4.467138468
+ZFAND6		+	9	0.000004953190491	4.419206821
+FGFR2	MAPK signaling pathway | Ras signaling pathway | Rap1 signaling pathway | Endocytosis | PI3K-Akt signaling pathway | Signaling pathways regulating pluripotency of stem cells | Regulation of actin cytoskeleton | Pathways in cancer | Prostate cancer | Gastric cancer | Central carbon metabolism in cancer	+	10	0.000005603671608	4.392463535
+RFX5	Antigen processing and presentation | Tuberculosis | Primary immunodeficiency	+	10	0.000005889432593	4.381641233
+STMN1	MAPK signaling pathway | MicroRNAs in cancer	+	11	0.00000605121623	4.37573437
+UBC	PPAR signaling pathway	+	9	0.000006952124421	4.345367804
+LMO4		+	8	0.000007263894515	4.335728923
+JUN	MAPK signaling pathway | ErbB signaling pathway | cAMP signaling pathway | Mitophagy - animal | Apoptosis | Wnt signaling pathway | Osteoclast differentiation | Focal adhesion | Tight junction | Toll-like receptor signaling pathway | NOD-like receptor signaling pathway | C-type lectin receptor signaling pathway | IL-17 signaling pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | T cell receptor signaling pathway | B cell receptor signaling pathway | TNF signaling pathway | Neurotrophin signaling pathway | GnRH signaling pathway | Estrogen signaling pathway | Oxytocin signaling pathway | Relaxin signaling pathway | Non-alcoholic fatty liver disease (NAFLD) | AGE-RAGE signaling pathway in diabetic complications | Cocaine addiction | Amphetamine addiction | Epithelial cell signaling in Helicobacter pylori infection | Salmonella infection | Pertussis | Leishmaniasis | Chagas disease (American trypanosomiasis) | Hepatitis B | Measles | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Viral carcinogenesis | Colorectal cancer | Renal cell carcinoma | Breast cancer | Choline metabolism in cancer | Inflammatory bowel disease (IBD) | Rheumatoid arthritis | Fluid shear stress and atherosclerosis	+	26	0.000007347277402	4.333217885
+TLR2	Phagosome | PI3K-Akt signaling pathway | Toll-like receptor signaling pathway | Legionellosis | Leishmaniasis | Chagas disease (American trypanosomiasis) | Malaria | Toxoplasmosis | Amoebiasis | Tuberculosis | Hepatitis B | Measles | Herpes simplex virus 1 infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection | Proteoglycans in cancer | Inflammatory bowel disease (IBD) | Rheumatoid arthritis	+	8	0.00000762344067	4.325091138
+ESR2	Estrogen signaling pathway | Prolactin signaling pathway | Pathways in cancer | Breast cancer	+	11	0.000008330576977	4.305496614
+CCT7		+	11	0.00001148499719	4.233873736
+ARL1		+	9	0.0000155718794	4.164937706
+ARGLU1		+	7	0.00001620072718	4.155896462
+ISX		+	8	0.00001668153415	4.149205858
+RET	Pathways in cancer | Thyroid cancer | Central carbon metabolism in cancer	+	10	0.00001701808648	4.144630737
+QRSL1	Aminoacyl-tRNA biosynthesis	+	14	0.00001956698867	4.112534024
+RAF1	"MAPK signaling pathway | ErbB signaling pathway | Ras signaling pathway | Rap1 signaling pathway | cGMP-PKG signaling pathway | cAMP signaling pathway | Chemokine signaling pathway | FoxO signaling pathway | Sphingolipid signaling pathway | Phospholipase D signaling pathway | Autophagy - animal | mTOR signaling pathway | PI3K-Akt signaling pathway | Apoptosis | Cellular senescence | Vascular smooth muscle contraction | Axon guidance | VEGF signaling pathway | Apelin signaling pathway | Focal adhesion | Gap junction | Signaling pathways regulating pluripotency of stem cells | C-type lectin receptor signaling pathway | JAK-STAT signaling pathway | Natural killer cell mediated cytotoxicity | T cell receptor signaling pathway | B cell receptor signaling pathway | Fc epsilon RI signaling pathway | Fc gamma R-mediated phagocytosis | Long-term potentiation | Neurotrophin signaling pathway | Serotonergic synapse | Long-term depression | Regulation of actin cytoskeleton | Insulin signaling pathway | GnRH signaling pathway | Progesterone-mediated oocyte maturation | Estrogen signaling pathway | Melanogenesis | Prolactin signaling pathway | Thyroid hormone signaling pathway | Oxytocin signaling pathway | Relaxin signaling pathway | Parathyroid hormone synthesis, secretion and action | Alcoholism | Tuberculosis | Hepatitis C | Hepatitis B | Human cytomegalovirus infection | Influenza A | Human papillomavirus infection | Kaposi sarcoma-associated herpesvirus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Proteoglycans in cancer | MicroRNAs in cancer | Colorectal cancer | Renal cell carcinoma | Pancreatic cancer | Endometrial cancer | Glioma | Prostate cancer | Melanoma | Bladder cancer | Chronic myeloid leukemia | Acute myeloid leukemia | Non-small cell lung cancer | Breast cancer | Hepatocellular carcinoma | Gastric cancer | Central carbon metabolism in cancer | Choline metabolism in cancer"	+	13	0.00002014034694	4.10586371
+PHACTR1		+	8	0.00002044572214	4.102384247
+ADO	Taurine and hypotaurine metabolism	+	12	0.00002104916361	4.095651249
+TERF1		+	9	0.00002474453058	4.058026935
+ZFX		+	12	0.0000253998592	4.051916858
+MCM8		+	7	0.00002797467333	4.02927412
+QPRT	Nicotinate and nicotinamide metabolism	+	9	0.00002887959433	4.021783282
+GPX4	Glutathione metabolism | Ferroptosis	+	6	0.00003114852585	4.003936657
+HIST1H2BK	Alcoholism | Viral carcinogenesis | Systemic lupus erythematosus	+	11	0.0000312448589	4.00320648
+BLVRA	Porphyrin and chlorophyll metabolism	+	13	0.00003283687113	3.991438421
+PAPOLA	mRNA surveillance pathway	+	9	0.00003492774423	3.976777437
+GBP2	NOD-like receptor signaling pathway	+	8	0.00003522491864	3.974761436
+PFKL	Glycolysis / Gluconeogenesis | Pentose phosphate pathway | Fructose and mannose metabolism | Galactose metabolism | RNA degradation | HIF-1 signaling pathway | AMPK signaling pathway | Glucagon signaling pathway | Central carbon metabolism in cancer	+	8	0.00003562924325	3.972044224
+PSMB1	Proteasome	+	10	0.00003640274318	3.966926324
+PSMB2	Proteasome	+	10	0.00003907707794	3.949990926
+PTK2	ErbB signaling pathway | Chemokine signaling pathway | PI3K-Akt signaling pathway | Axon guidance | VEGF signaling pathway | Focal adhesion | Leukocyte transendothelial migration | Regulation of actin cytoskeleton | Bacterial invasion of epithelial cells | Amoebiasis | Human cytomegalovirus infection | Human papillomavirus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Transcriptional misregulation in cancer | Proteoglycans in cancer | Small cell lung cancer | Fluid shear stress and atherosclerosis	+	15	0.00003915597263	3.949508148
+NVL	Ribosome biogenesis in eukaryotes	+	12	0.00004271789577	3.928616973
+MAP3K14	MAPK signaling pathway | NF-kappa B signaling pathway | Apoptosis | Osteoclast differentiation | C-type lectin receptor signaling pathway | T cell receptor signaling pathway | TNF signaling pathway | Intestinal immune network for IgA production | Epithelial cell signaling in Helicobacter pylori infection | Human T-cell leukemia virus 1 infection | Epstein-Barr virus infection	+	10	0.00004475799496	3.917381593
+SLC39A6		+	7	0.00004529853554	3.914485794
+MYC	MAPK signaling pathway | ErbB signaling pathway | Cell cycle | PI3K-Akt signaling pathway | Cellular senescence | Wnt signaling pathway | TGF-beta signaling pathway | Hippo signaling pathway | Signaling pathways regulating pluripotency of stem cells | JAK-STAT signaling pathway | Thyroid hormone signaling pathway | Hepatitis C | Hepatitis B | Human cytomegalovirus infection | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Epstein-Barr virus infection | Pathways in cancer | Transcriptional misregulation in cancer | Proteoglycans in cancer | MicroRNAs in cancer | Colorectal cancer | Endometrial cancer | Thyroid cancer | Bladder cancer | Chronic myeloid leukemia | Acute myeloid leukemia | Small cell lung cancer | Breast cancer | Hepatocellular carcinoma | Gastric cancer | Central carbon metabolism in cancer	+	25	0.00004748316962	3.903105356
+CLCN5		+	7	0.00004755908892	3.902718823
+DDIT4	Autophagy - animal | mTOR signaling pathway | PI3K-Akt signaling pathway | MicroRNAs in cancer	+	15	0.00004821915614	3.899382527
+JAK1	PI3K-Akt signaling pathway | Necroptosis | Osteoclast differentiation | Signaling pathways regulating pluripotency of stem cells | NOD-like receptor signaling pathway | JAK-STAT signaling pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | Leishmaniasis | Toxoplasmosis | Tuberculosis | Hepatitis C | Hepatitis B | Measles | Human cytomegalovirus infection | Influenza A | Human papillomavirus infection | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Herpes simplex virus 1 infection | Epstein-Barr virus infection | Pathways in cancer | Viral carcinogenesis | Pancreatic cancer	+	10	0.00005166594686	3.882631991
+KNDC1		+	8	0.00005387796256	3.87242933
+PAF1		+	13	0.00005817050638	3.853710787
+AKT3	MAPK signaling pathway | ErbB signaling pathway | Ras signaling pathway | Rap1 signaling pathway | cGMP-PKG signaling pathway | cAMP signaling pathway | Chemokine signaling pathway | HIF-1 signaling pathway | FoxO signaling pathway | Sphingolipid signaling pathway | Phospholipase D signaling pathway | Autophagy - animal | mTOR signaling pathway | PI3K-Akt signaling pathway | AMPK signaling pathway | Apoptosis | Longevity regulating pathway | Longevity regulating pathway - multiple species | Cellular senescence | Adrenergic signaling in cardiomyocytes | VEGF signaling pathway | Apelin signaling pathway | Osteoclast differentiation | Focal adhesion | Signaling pathways regulating pluripotency of stem cells | Platelet activation | Toll-like receptor signaling pathway | C-type lectin receptor signaling pathway | JAK-STAT signaling pathway | T cell receptor signaling pathway | B cell receptor signaling pathway | Fc epsilon RI signaling pathway | Fc gamma R-mediated phagocytosis | TNF signaling pathway | Neurotrophin signaling pathway | Cholinergic synapse | Dopaminergic synapse | Insulin signaling pathway | Progesterone-mediated oocyte maturation | Estrogen signaling pathway | Prolactin signaling pathway | Thyroid hormone signaling pathway | Adipocytokine signaling pathway | Glucagon signaling pathway | Regulation of lipolysis in adipocytes | Relaxin signaling pathway | Insulin resistance | Non-alcoholic fatty liver disease (NAFLD) | AGE-RAGE signaling pathway in diabetic complications | Carbohydrate digestion and absorption | Chagas disease (American trypanosomiasis) | Toxoplasmosis | Tuberculosis | Hepatitis C | Hepatitis B | Measles | Human cytomegalovirus infection | Influenza A | Human papillomavirus infection | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Herpes simplex virus 1 infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Proteoglycans in cancer | Colorectal cancer | Renal cell carcinoma | Pancreatic cancer | Endometrial cancer | Glioma | Prostate cancer | Melanoma | Chronic myeloid leukemia | Acute myeloid leukemia | Small cell lung cancer | Non-small cell lung cancer | Breast cancer | Hepatocellular carcinoma | Gastric cancer | Central carbon metabolism in cancer | Choline metabolism in cancer | Fluid shear stress and atherosclerosis	+	11	0.00006246402945	3.836248391
+PROCR	Complement and coagulation cascades	+	9	0.0000635867509	3.831868907
+NME1	Purine metabolism | Pyrimidine metabolism | Drug metabolism - other enzymes	+	9	0.00006434806882	3.828940455
+TOLLIP	Toll-like receptor signaling pathway	+	7	0.00006838805569	3.813926591
+FADS1	Biosynthesis of unsaturated fatty acids	+	9	0.00006883980256	3.812300035
+GPR39		+	7	0.00007139027259	3.803301262
+AKAP8L		+	14	0.00007236208415	3.799951913
+IL23R	Cytokine-cytokine receptor interaction | JAK-STAT signaling pathway | Th17 cell differentiation | Pathways in cancer | Inflammatory bowel disease (IBD)	+	10	0.00007251734372	3.799420739
+RBCK1	Necroptosis | NOD-like receptor signaling pathway	+	8	0.00007586816061	3.78821041
+MAPK10	MAPK signaling pathway | ErbB signaling pathway | Ras signaling pathway | cAMP signaling pathway | FoxO signaling pathway | Sphingolipid signaling pathway | Mitophagy - animal | Autophagy - animal | Protein processing in endoplasmic reticulum | Apoptosis | Apoptosis - multiple species | Necroptosis | Wnt signaling pathway | Osteoclast differentiation | Focal adhesion | Tight junction | Toll-like receptor signaling pathway | NOD-like receptor signaling pathway | RIG-I-like receptor signaling pathway | C-type lectin receptor signaling pathway | IL-17 signaling pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | Fc epsilon RI signaling pathway | TNF signaling pathway | Neurotrophin signaling pathway | Retrograde endocannabinoid signaling | Dopaminergic synapse | Inflammatory mediator regulation of TRP channels | Insulin signaling pathway | GnRH signaling pathway | Progesterone-mediated oocyte maturation | Prolactin signaling pathway | Adipocytokine signaling pathway | Relaxin signaling pathway | Type II diabetes mellitus | Insulin resistance | Non-alcoholic fatty liver disease (NAFLD) | AGE-RAGE signaling pathway in diabetic complications | Epithelial cell signaling in Helicobacter pylori infection | Shigellosis | Salmonella infection | Pertussis | Chagas disease (American trypanosomiasis) | Toxoplasmosis | Tuberculosis | Hepatitis B | Measles | Human T-cell leukemia virus 1 infection | Kaposi sarcoma-associated herpesvirus infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | Colorectal cancer | Pancreatic cancer | Choline metabolism in cancer | Fluid shear stress and atherosclerosis	+	1	0.0000800074249	3.774988805
+BHMT2	Cysteine and methionine metabolism	+	7	0.00008150643551	3.770359017
+CSNK1G3	Hedgehog signaling pathway	+	8	0.00008695509904	3.754179515
+VAMP3	SNARE interactions in vesicular transport | Phagosome	+	8	0.00009913604857	3.721207927
+TMED10		+	13	0.0001003042354	3.718249015
+AK3	Purine metabolism	+	9	0.0001058517075	3.704625331
+WRN		+	14	0.0001148208652	3.683956186
+SNW1	Spliceosome | Notch signaling pathway | Epstein-Barr virus infection | Viral carcinogenesis	+	9	0.0001163563637	3.680570475
+RAN	Ribosome biogenesis in eukaryotes | RNA transport | Human T-cell leukemia virus 1 infection	+	7	0.000126208148	3.659795819
+NADK	Nicotinate and nicotinamide metabolism	+	1	0.0001303061589	3.651599275
+CHEK1	Cell cycle | p53 signaling pathway | Cellular senescence | Human T-cell leukemia virus 1 infection | Human immunodeficiency virus 1 infection | Viral carcinogenesis	+	11	0.0001306094837	3.651002234
+ATP2A2	Calcium signaling pathway | cGMP-PKG signaling pathway | cAMP signaling pathway | Cardiac muscle contraction | Adrenergic signaling in cardiomyocytes | Thyroid hormone signaling pathway | Pancreatic secretion | Alzheimer disease | Hypertrophic cardiomyopathy (HCM) | Arrhythmogenic right ventricular cardiomyopathy (ARVC) | Dilated cardiomyopathy (DCM)	+	8	0.0001391256391	3.634749116
+AOC3	"Glycine, serine and threonine metabolism | Tyrosine metabolism | Phenylalanine metabolism | beta-Alanine metabolism"	+	9	0.000140472115	3.632265146
+PSMA5	Proteasome	+	8	0.0001424955507	3.628573966
+MLKL	Necroptosis | TNF signaling pathway	+	1	0.0001444484866	3.625057673
+TADA2A		+	9	0.0001641255753	3.591919584
+ME1	Pyruvate metabolism | PPAR signaling pathway	+	8	0.0001711585628	3.580972928
+SRC	ErbB signaling pathway | Rap1 signaling pathway | Chemokine signaling pathway | Mitophagy - animal | Endocytosis | Axon guidance | VEGF signaling pathway | Focal adhesion | Adherens junction | Tight junction | Gap junction | Platelet activation | C-type lectin receptor signaling pathway | GABAergic synapse | Inflammatory mediator regulation of TRP channels | Regulation of actin cytoskeleton | GnRH signaling pathway | Estrogen signaling pathway | Prolactin signaling pathway | Thyroid hormone signaling pathway | Oxytocin signaling pathway | Relaxin signaling pathway | Bacterial invasion of epithelial cells | Epithelial cell signaling in Helicobacter pylori infection | Shigellosis | Tuberculosis | Hepatitis B | Human cytomegalovirus infection | Kaposi sarcoma-associated herpesvirus infection | Herpes simplex virus 1 infection | Viral carcinogenesis | Proteoglycans in cancer | Bladder cancer | Fluid shear stress and atherosclerosis	+	12	0.0001805642194	3.56697317
+PSMD2	Proteasome | Epstein-Barr virus infection	+	9	0.0001859770166	3.5592227
+RARRES3		+	8	0.0001947235119	3.547133614
+MAT1A	Cysteine and methionine metabolism	+	6	0.0001998696807	3.540255813
+PSMD1	Proteasome | Epstein-Barr virus infection	+	9	0.0002027279612	3.536506892
+ISL1	Signaling pathways regulating pluripotency of stem cells	+	8	0.0002031446164	3.535964535
+ATR	Fanconi anemia pathway | Cell cycle | p53 signaling pathway | Cellular senescence | Human papillomavirus infection | Human T-cell leukemia virus 1 infection | Human immunodeficiency virus 1 infection	+	13	0.000206841624	3.531197174
+TPK1	Thiamine metabolism	+	1	0.000207677833	3.53012991
+BAG6		+	11	0.0002207485704	3.513949258
+NUDT9	Purine metabolism	+	13	0.000221223141	3.513378759
+CNOT3	RNA degradation	+	8	0.0002241799983	3.509849734
+ZNF596	Herpes simplex virus 1 infection	+	9	0.0002250382499	3.50883354
+FOXJ3		+	12	0.0002469489142	3.484044248
+PSMA1	Proteasome	+	7	0.0002575509612	3.472777643
+PPAT	"Purine metabolism | Alanine, aspartate and glutamate metabolism"	+	9	0.0002891998932	3.441546155
+OPA1		+	8	0.0002921830045	3.43876883
+SPEG		+	1	0.0002940128312	3.437078266
+POLR2E	RNA polymerase | Cytosolic DNA-sensing pathway | Huntington disease	+	7	0.0002993497405	3.43220289
+ZNF517	Herpes simplex virus 1 infection	+	9	0.0003070783722	3.425284143
+CNOT8	RNA degradation	+	7	0.0003196292332	3.414386394
+GGT1	Taurine and hypotaurine metabolism | Glutathione metabolism | Arachidonic acid metabolism	+	9	0.0003384876124	3.398738044
+NDUFC2	Oxidative phosphorylation | Thermogenesis | Retrograde endocannabinoid signaling | Non-alcoholic fatty liver disease (NAFLD) | Alzheimer disease | Parkinson disease | Huntington disease	+	8	0.0003460302649	3.392705288
+SEC24D	Protein processing in endoplasmic reticulum	+	8	0.0003532772412	3.387023062
+ZBTB45		+	8	0.0003629043543	3.37963985
+SF3B1	Spliceosome	+	7	0.0003672051446	3.376400129
+PDPK1	PPAR signaling pathway | FoxO signaling pathway | Sphingolipid signaling pathway | Autophagy - animal | mTOR signaling pathway | PI3K-Akt signaling pathway | AMPK signaling pathway | Apoptosis | Focal adhesion | T cell receptor signaling pathway | Fc epsilon RI signaling pathway | Neurotrophin signaling pathway | Insulin signaling pathway | Thyroid hormone signaling pathway | Insulin resistance | Aldosterone-regulated sodium reabsorption | Toxoplasmosis | Proteoglycans in cancer | Endometrial cancer | Prostate cancer | Non-small cell lung cancer | Choline metabolism in cancer	+	13	0.0003679611203	3.375834309
+LIPH		+	8	0.0003838364354	3.364194983
+SOX2	Hippo signaling pathway | Signaling pathways regulating pluripotency of stem cells	+	10	0.0003906799256	3.359314867
+USF1		+	9	0.0003945638025	3.356580445
+TARS	Aminoacyl-tRNA biosynthesis	+	11	0.0003989562928	3.353517879
+GATA6		+	9	0.0004030551842	3.350688115
+TSSK4		+	1	0.0004054554376	3.349043417
+AAK1		+	1	0.0004088726295	3.346717413
+MAP2K6	MAPK signaling pathway | Rap1 signaling pathway | Cellular senescence | Osteoclast differentiation | Toll-like receptor signaling pathway | Fc epsilon RI signaling pathway | TNF signaling pathway | Inflammatory mediator regulation of TRP channels | GnRH signaling pathway | Amyotrophic lateral sclerosis (ALS) | Toxoplasmosis | Hepatitis B | Human cytomegalovirus infection | Kaposi sarcoma-associated herpesvirus infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection | Fluid shear stress and atherosclerosis	+	8	0.0004174499349	3.340957551
+ULK3		+	8	0.0004283860765	3.333770834
+C2CD2		+	11	0.0004392100164	3.326823466
+DGKB	Glycerolipid metabolism | Glycerophospholipid metabolism | Phosphatidylinositol signaling system | Phospholipase D signaling pathway | Choline metabolism in cancer	+	1	0.0004409131017	3.32574482
+STK35		+	1	0.0004559650652	3.316376101
+ITGA2	Phagosome | PI3K-Akt signaling pathway | Focal adhesion | ECM-receptor interaction | Platelet activation | Hematopoietic cell lineage | Regulation of actin cytoskeleton | Human papillomavirus infection | Pathways in cancer | Proteoglycans in cancer | Small cell lung cancer | Hypertrophic cardiomyopathy (HCM) | Arrhythmogenic right ventricular cardiomyopathy (ARVC) | Dilated cardiomyopathy (DCM)	+	8	0.0004734215534	3.305863177
+ZIM3	Herpes simplex virus 1 infection	+	8	0.0004768888688	3.30381787
+SUPT16H		+	8	0.0004809872692	3.301417987
+SULT1A3	Chemical carcinogenesis	+	9	0.0005062382579	3.287036662
+CCNA1	Cell cycle | AMPK signaling pathway | Cellular senescence | Progesterone-mediated oocyte maturation | Hepatitis B | Human papillomavirus infection | Human T-cell leukemia virus 1 infection | Epstein-Barr virus infection | Pathways in cancer | Transcriptional misregulation in cancer | Viral carcinogenesis | Acute myeloid leukemia	+	9	0.000516462003	3.281402031
+NR3C1	Neuroactive ligand-receptor interaction	+	13	0.0005336716297	3.272146309
+PFDN2		+	18	0.0005576740255	3.259688073
+HIST1H1E		+	3	0.0005672951632	3.254833071
+PROX1		+	8	0.0005925888632	3.242423474
+MYBL2	Cellular senescence	+	14	0.0006459479497	3.21777395
+YES1	Adherens junction	+	12	0.000658256767	3.212355508
+PDHA1	Glycolysis / Gluconeogenesis | Citrate cycle (TCA cycle) | Pyruvate metabolism | HIF-1 signaling pathway | Glucagon signaling pathway | Central carbon metabolism in cancer	+	8	0.0006676981816	3.20826232
+GYG1	Starch and sucrose metabolism	+	8	0.0006715266327	3.206617751
+HGS	Endocytosis | Phagosome	+	10	0.0006748880066	3.205180938
+RPS16	Ribosome	+	7	0.0006779736772	3.203867773
+CCNC		+	8	0.0006840654837	3.201291398
+ATF6	Protein processing in endoplasmic reticulum | Alzheimer disease	+	10	0.0007164316744	3.187947934
+ENTPD6	Purine metabolism | Pyrimidine metabolism	+	13	0.0007225867579	3.185473474
+MYD88	MAPK signaling pathway | NF-kappa B signaling pathway | Toll-like receptor signaling pathway | NOD-like receptor signaling pathway | Salmonella infection | Pertussis | Legionellosis | Leishmaniasis | Chagas disease (American trypanosomiasis) | African trypanosomiasis | Malaria | Toxoplasmosis | Tuberculosis | Hepatitis B | Measles | Influenza A | Herpes simplex virus 1 infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection	+	9	0.0007356150363	3.180299308
+KRT19	Estrogen signaling pathway	+	19	0.0007493724556	3.174926437
+KIAA0907		+	10	0.000752751883	3.173620534
+OAZ2		+	8	0.0007756904906	3.164896552
+FCGR2A	Phagosome | Osteoclast differentiation | Platelet activation | Fc gamma R-mediated phagocytosis | Leishmaniasis | Staphylococcus aureus infection | Tuberculosis | Systemic lupus erythematosus	+	9	0.0007759148534	3.164812402
+RASSF2	Hippo signaling pathway - multiple species	+	7	0.0007835292612	3.161969731
+EPC1		+	7	0.000796729631	3.157101398
+ANO10		+	8	0.0008108501417	3.151975232
+KAT6A	Signaling pathways regulating pluripotency of stem cells	+	12	0.000812847059	3.151256934
+ABCB1	ABC transporters | Bile secretion | MicroRNAs in cancer | Gastric cancer	+	9	0.0008160370228	3.150112855
+ARG2	Arginine biosynthesis | Arginine and proline metabolism | Amoebiasis	+	8	0.0008398950581	3.14168437
+ECSIT	MAPK signaling pathway	+	8	0.0008411765188	3.14123792
+ZNF449		+	7	0.0008826614767	3.127112611
+PPAP2B	Glycerolipid metabolism | Glycerophospholipid metabolism | Ether lipid metabolism | Sphingolipid metabolism | Phospholipase D signaling pathway | Fc gamma R-mediated phagocytosis | Fat digestion and absorption | Choline metabolism in cancer	+	9	0.0008826875389	3.127103931
+ZNF768	Herpes simplex virus 1 infection	+	12	0.0009032201605	3.120337344
+ZNF626		+	9	0.00092094095	3.11461012
+NDUFAF4	Thermogenesis	+	8	0.0009251280032	3.113271694
+UROD	Porphyrin and chlorophyll metabolism	+	8	0.0009259654709	3.113004659
+HCFC2	Herpes simplex virus 1 infection	+	8	0.0009350502023	3.110122071
+TNFRSF11A	Cytokine-cytokine receptor interaction | NF-kappa B signaling pathway | Osteoclast differentiation | Prolactin signaling pathway | Rheumatoid arthritis	+	8	0.0009479145912	3.106083897
+KREMEN1		+	8	0.0009704834791	3.09911953
+XIAP	NF-kappa B signaling pathway | Ubiquitin mediated proteolysis | Apoptosis | Apoptosis - multiple species | Necroptosis | Focal adhesion | NOD-like receptor signaling pathway | Toxoplasmosis | Human T-cell leukemia virus 1 infection | Pathways in cancer | Small cell lung cancer	+	4	0.0009736493092	3.098154529
+RUVBL1	Wnt signaling pathway	+	13	0.001014454256	3.085967714
+KDELR3	Vibrio cholerae infection	+	10	0.001082422388	3.066632997
+POFUT1	Other types of O-glycan biosynthesis	+	7	0.001097533133	3.062486159
+SNRK		+	8	0.00110184376	3.061312788
+PRPF6	Spliceosome	+	14	0.001130926858	3.053504444
+IFNG	Proteasome | Cytokine-cytokine receptor interaction | HIF-1 signaling pathway | Necroptosis | TGF-beta signaling pathway | Osteoclast differentiation | Antigen processing and presentation | JAK-STAT signaling pathway | Natural killer cell mediated cytotoxicity | IL-17 signaling pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | T cell receptor signaling pathway | Type I diabetes mellitus | Salmonella infection | Leishmaniasis | Chagas disease (American trypanosomiasis) | African trypanosomiasis | Malaria | Toxoplasmosis | Amoebiasis | Tuberculosis | Hepatitis C | Influenza A | Herpes simplex virus 1 infection | Pathways in cancer | Inflammatory bowel disease (IBD) | Systemic lupus erythematosus | Rheumatoid arthritis | Allograft rejection | Graft-versus-host disease | Fluid shear stress and atherosclerosis	+	8	0.001161839097	3.045404165
+NFKBIB	Chemokine signaling pathway | NOD-like receptor signaling pathway | RIG-I-like receptor signaling pathway | Cytosolic DNA-sensing pathway | Th1 and Th2 cell differentiation | Th17 cell differentiation | T cell receptor signaling pathway | B cell receptor signaling pathway | Neurotrophin signaling pathway | Adipocytokine signaling pathway | Shigellosis | Leishmaniasis | Toxoplasmosis | Measles | Influenza A | Epstein-Barr virus infection	+	11	0.001215576012	3.031781393
+KLHDC2		+	10	0.001234537682	3.027105783
+ZNF22		+	7	0.001249752132	3.023401447
+NCOA3	Estrogen signaling pathway | Thyroid hormone signaling pathway | Pathways in cancer | Breast cancer	+	16	0.001280712286	3.015989112
+KRT25	Estrogen signaling pathway	+	9	0.001300487795	3.011339857
+FZD8	mTOR signaling pathway | Wnt signaling pathway | Hippo signaling pathway | Signaling pathways regulating pluripotency of stem cells | Melanogenesis | Cushing syndrome | Human papillomavirus infection | Pathways in cancer | Proteoglycans in cancer | Basal cell carcinoma | Breast cancer | Hepatocellular carcinoma | Gastric cancer	+	9	0.001304601738	3.010380791
+EIF2AK3	Mitophagy - animal | Autophagy - animal | Protein processing in endoplasmic reticulum | Apoptosis | Non-alcoholic fatty liver disease (NAFLD) | Alzheimer disease | Hepatitis C | Measles | Herpes simplex virus 1 infection	+	14	0.00134369882	3.001401731
+BCL2	"NF-kappa B signaling pathway | HIF-1 signaling pathway | Sphingolipid signaling pathway | p53 signaling pathway | Autophagy - animal | Protein processing in endoplasmic reticulum | PI3K-Akt signaling pathway | Apoptosis | Apoptosis - multiple species | Necroptosis | Adrenergic signaling in cardiomyocytes | Hedgehog signaling pathway | Focal adhesion | NOD-like receptor signaling pathway | JAK-STAT signaling pathway | Neurotrophin signaling pathway | Cholinergic synapse | Estrogen signaling pathway | Parathyroid hormone synthesis, secretion and action | AGE-RAGE signaling pathway in diabetic complications | Amyotrophic lateral sclerosis (ALS) | Toxoplasmosis | Tuberculosis | Hepatitis B | Measles | Herpes simplex virus 1 infection | Epstein-Barr virus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | MicroRNAs in cancer | Colorectal cancer | Prostate cancer | Small cell lung cancer | Gastric cancer | Fluid shear stress and atherosclerosis"	+	15	0.001383549213	2.992492085
+KDM3A	Thermogenesis	+	10	0.001443228556	2.979578022
+MDH2	Citrate cycle (TCA cycle) | Cysteine and methionine metabolism | Pyruvate metabolism | Glyoxylate and dicarboxylate metabolism	+	8	0.001454439872	2.977206539
+ZNF232		+	8	0.001518126861	2.964043491
+BIRC6	Ubiquitin mediated proteolysis | Apoptosis - multiple species	+	9	0.001549066581	2.957829619
+UMODL1		+	9	0.001549643205	2.957714889
+DLX2		+	7	0.001567551658	2.954170906
+CD70	Cytokine-cytokine receptor interaction	+	3	0.00158913073	2.949949236
+STK33		+	13	0.001729824816	2.923639682
+ARHGAP35	Focal adhesion | Platelet activation | Leukocyte transendothelial migration | Regulation of actin cytoskeleton	+	8	0.001763484649	2.917635006
+NR2F2		+	11	0.0017640237	2.917539695
+WWOX		+	10	0.001767707389	2.916889076
+IL1R1	MAPK signaling pathway | Cytokine-cytokine receptor interaction | NF-kappa B signaling pathway | Osteoclast differentiation | Hematopoietic cell lineage | Th17 cell differentiation | Inflammatory mediator regulation of TRP channels | Amoebiasis | Human cytomegalovirus infection | Human T-cell leukemia virus 1 infection | Fluid shear stress and atherosclerosis	+	9	0.001775125016	2.915582699
+SLC29A1	Alcoholism	+	7	0.001786079287	2.91366251
+PIP5K1B	Inositol phosphate metabolism | Phosphatidylinositol signaling system | Phospholipase D signaling pathway | Endocytosis | Fc gamma R-mediated phagocytosis | Regulation of actin cytoskeleton | Choline metabolism in cancer	+	1	0.001792981868	2.912458041
+MAFG		+	8	0.00183278495	2.905593777
+ZNF8	Herpes simplex virus 1 infection	+	8	0.001841903695	2.9040403
+MATN3		+	3	0.001938655275	2.887974702
+ZNF524		+	9	0.001950950556	2.885985518
+SPP1	PI3K-Akt signaling pathway | Apelin signaling pathway | Focal adhesion | ECM-receptor interaction | Toll-like receptor signaling pathway | Human papillomavirus infection	+	8	0.001970760342	2.882804429
+RRP8		+	11	0.00197963246	2.881389136
+NME6	Purine metabolism | Pyrimidine metabolism | Drug metabolism - other enzymes	+	1	0.002016288913	2.875602038
+ADAM17	Notch signaling pathway | Alzheimer disease | Epithelial cell signaling in Helicobacter pylori infection	+	10	0.002024205611	2.87436475
+AURKA	Oocyte meiosis | Progesterone-mediated oocyte maturation	+	12	0.002094950342	2.863499052
+TYMS	Pyrimidine metabolism | One carbon pool by folate	+	11	0.002108356931	2.861477535
+TK1	Pyrimidine metabolism | Drug metabolism - other enzymes	+	8	0.002145301353	2.855966598
+CBFA2T3		+	8	0.002152396782	2.854918047
+DYRK3		+	14	0.002203435902	2.847466601
+NT5E	Purine metabolism | Pyrimidine metabolism | Nicotinate and nicotinamide metabolism	+	9	0.00226461021	2.838738877
+BRAP	Ras signaling pathway	+	8	0.002376722301	2.823283987
+BCCIP		+	9	0.002392162695	2.821207444
+SENP6		+	13	0.002412208111	2.818529602
+BIRC5	Apoptosis | Apoptosis - multiple species | Hippo signaling pathway | Hepatitis B | Pathways in cancer | Colorectal cancer	+	14	0.00244643701	2.814003207
+VCP	Protein processing in endoplasmic reticulum | Legionellosis	+	7	0.002519374574	2.804546036
+CRKL	MAPK signaling pathway | ErbB signaling pathway | Rap1 signaling pathway | Chemokine signaling pathway | Focal adhesion | Fc gamma R-mediated phagocytosis | Neurotrophin signaling pathway | Regulation of actin cytoskeleton | Insulin signaling pathway | Bacterial invasion of epithelial cells | Shigellosis | Human cytomegalovirus infection | Human immunodeficiency virus 1 infection | Pathways in cancer | MicroRNAs in cancer | Renal cell carcinoma | Chronic myeloid leukemia	+	24	0.002523191269	2.804058005
+LIAS	Lipoic acid metabolism	+	7	0.002534951295	2.802558467
+TXNRD1	Selenocompound metabolism | Pathways in cancer | Hepatocellular carcinoma	+	14	0.002611651931	2.792929722
