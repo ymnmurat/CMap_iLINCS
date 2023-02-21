@@ -8,7 +8,7 @@
 # Feb 21, 2023 - Murat Yaman
 
 rm(list = ls())
-suppressPackageStartupMessages(source('../20230221_mylib_functions.R'))
+suppressPackageStartupMessages(source('../CMap_iLINCS_SwissTarget_functions.R'))
 setwd('../DEGs/')
 #Please be careful with the pattern and how you keep the names of your original files that you previously obtained from iLINCS gene expression data. Preferably, keep the names in a similar format as they are in the names of the sample files eg. iLINCS_complete_HA1E_24_warfarin_004uM.xls (iLINCS: data source, complete: complete list of genes, HA1E: name of the cell line, 24: 24h of exposure, warfarin: compound of interest, 004uM: 0.04 uM exposure concentration - becareful with using the underscores, too) - if the compound or your file name contains special characters like []{}#.,/ the compiler function converts them to underscores.
 pattern="iLINCS_complete_HA1E_"
