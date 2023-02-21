@@ -6,7 +6,7 @@
 # (v) obtain heatmaps, correlation plots and upset plots for visual inspections
 # Feb 21, 2023 - Murat Yaman
 rm(list = ls())
-suppressPackageStartupMessages(source('../20230221_mylib_functions.R'))
+suppressPackageStartupMessages(source('../CMap_iLINCS_SwissTarget_functions.R'))
 setwd('../ilincs/')
 
 ptrn='_conn_HA1E_'
