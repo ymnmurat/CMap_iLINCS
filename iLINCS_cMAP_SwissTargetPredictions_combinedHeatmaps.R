@@ -23,8 +23,15 @@ swisstarget=swisstargetdatafile_compiler(ptrn ='SwissTargetPrediction_', targets
 ## (1) Input data from zebrafish RNAseq. 
 ## We will create a dummy expression data here. In addition, you will need a list of ortholog and paralog genes for zebrafish and human, or your species of interest vise versa. Using human as the target species is strongly recommended in this pipeline for ortholog/paralog assessments. This is mainly because the heatmaps and the functions used here are more oriented towards the SwissTargetPrediction outputs and human gene names associated with them.
 ## Here BioMaRT package is utilized to get a fine grade ortholog/paralog data. Strangely, getLDS() function of this package is recently running into some issues, hence our custom function is currently referring to one of the older versions (Dec 2021 release). Note: It may take a while to get the data from BioMaRT.
-## Alternatively, you can get this list by visiting Ensemble's BioMaRT services, or install a specific database distribution for your model organism (for zebrafish "org.Dr.eg.db"), or make use of alternative packages for ease of demonstration.
-## orthogene library is one of them, and you can follow the code below, to retrieve ortholog genes between zebrafish and human
+## Alternatively, you can get this list by visiting Ensemble's BioMaRT services, install a specific database distribution for your model organism (for zebrafish "org.Dr.eg.db"), retrieve data from online sources (zfin.org) or make use of alternative packages for ease of demonstration.
+
+## For zfin.org data, you can follow the commands below
+# library(data.table)
+# orth_zeb=fread('https://zfin.org/downloads/human_orthos.txt')[,c(2,4)]
+# orth_zeb=orth_zeb[!duplicated(orth_zeb),]
+# colnames(orth_zeb)=c('Gene.name','Gene.name.1')
+
+## orthogene library is one of the alternative packages, and you can follow the code below, to retrieve ortholog genes between zebrafish and human
 
 # library(orthogene)
 # orth_zeb=orthogene::report_orthologs(target_species = "zebrafish",
