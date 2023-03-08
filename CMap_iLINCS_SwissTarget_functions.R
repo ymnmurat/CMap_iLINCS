@@ -16,7 +16,7 @@ connectivitydatafile_compiler=function(ptrn=NULL, types=NULL,cormethod='spearman
   require(dplyr)
   fullds=c('kd','oe','cp','cc')
   #Confirm input parameters and update when needed
-  if(is.null(ptrn)){pattern='_conn_HA1E_'
+  if(is.null(ptrn)){pattern='_conn_HA1E_'; ptrn=pattern
   }else {pattern=ptrn
   while (length(list.files(pattern=pattern))==0) {pattern=as.character(readline(prompt='Please check out the current directory, and  if any, misspelling, capital letters etc.  '))}}
   
@@ -441,19 +441,19 @@ multi_heatmaps_SwissCMapILINCS=function(swisstargetDir='swisstarget', iLINCSconn
   #Collect data from the second cell line, if provided
   if (!is.null(secondCellLine)) {
     ptrn2=paste0('_conn_',secondCellLine,'_')
-    conndata=iLINCS_kd_connectivitydatafile_compiler(ptrn = ptrn2)
-    if(ncol(conndata)<3){print(paste0('Number of samples are limited for the iLINCS derived ', secondCellLine,' data. Please, retrieve additional data from iLINCS to proceed'))
-      quit(save = 'no')}else if(ncol(conndata)>9){print('Number of samples might be large for the iLINCS derived ', secondCellLine,' data. You may need to consider reducing amount of data you are providing')}
-    if(swissFocus & sum(grepl(pattern = paste0(toupper(colnames(stp)), collapse = '|'),toupper(colnames(conndata))))>1) {
-      conndata=conndata[,grepl(pattern = toupper(paste(c('GeneTarget',colnames(stp)), collapse = '|')), x = toupper(colnames(conndata)),ignore.case = T)]
+    conndata2=iLINCS_kd_connectivitydatafile_compiler(ptrn = ptrn2)
+    if(ncol(conndata2)<3){print(paste0('Number of samples are limited for the iLINCS derived ', secondCellLine,' data. Please, retrieve additional data from iLINCS to proceed'))
+      quit(save = 'no')}else if(ncol(conndata2)>9){print('Number of samples might be large for the iLINCS derived ', secondCellLine,' data. You may need to consider reducing amount of data you are providing')}
+    if(swissFocus & sum(grepl(pattern = paste0(toupper(colnames(stp)), collapse = '|'),toupper(colnames(conndata2))))>1) {
+      conndata2=conndata2[,grepl(pattern = toupper(paste(c('GeneTarget',colnames(stp)), collapse = '|')), x = toupper(colnames(conndata2)),ignore.case = T)]
     }else{swissFocus=F; print(paste0('Numbers of mutual compounds between SwissTarget and iLINCS ', secondCellLine,' data are limited (<2). Representations will ignore SwissTarget focused refinements further on'))}
-    miss_genes_ilincsConn=rownames(stp)[!toupper(rownames(stp))%in%toupper(conndata$GeneTarget)]
-    rownames(conndata)=conndata$GeneTarget; conndata$GeneTarget=NULL
-    miss_mat=matrix(data=as.numeric(NA),nrow = length(miss_genes_ilincsConn),ncol = ncol(conndata))
-    rownames(miss_mat)=miss_genes_ilincsConn; colnames(miss_mat)=colnames(conndata)
-    conndata=rbind(conndata,miss_mat)
-    conndata_stp2=as.matrix(conndata[toupper(rownames(conndata))%in%toupper(rownames(stp)),])
-    conndata_stp2=conndata_stp[order(rownames(conndata_stp)),]
+    miss_genes_ilincsConn=rownames(stp)[!toupper(rownames(stp))%in%toupper(conndata2$GeneTarget)]
+    rownames(conndata2)=conndata2$GeneTarget; conndata2$GeneTarget=NULL
+    miss_mat=matrix(data=as.numeric(NA),nrow = length(miss_genes_ilincsConn),ncol = ncol(conndata2))
+    rownames(miss_mat)=miss_genes_ilincsConn; colnames(miss_mat)=colnames(conndata2)
+    conndata2=rbind(conndata2,miss_mat)
+    conndata_stp2=as.matrix(conndata2[toupper(rownames(conndata2))%in%toupper(rownames(stp)),])
+    conndata_stp2=conndata_stp2[order(rownames(conndata_stp2)),]
   }else{conndata_stp2=NULL}
   
   #Collect CMap connectivity data for the query genes
@@ -512,7 +512,7 @@ multi_heatmaps_SwissCMapILINCS=function(swisstargetDir='swisstarget', iLINCSconn
     conndata_cmap_kd=rbind(conndata_cmap_kd,miss_mat)
     conndata_cmap_kd=conndata_cmap_kd[order(rownames(conndata_cmap_kd)),]
     conndata_cmap_kd_stp2=as.matrix(conndata_cmap_kd[toupper(rownames(conndata_cmap_kd))%in%candygenes,])
-    conndata_cmap_kd_stp2=conndata_cmap_kd_stp[order(rownames(conndata_cmap_kd_stp)),]
+    conndata_cmap_kd_stp2=conndata_cmap_kd_stp2[order(rownames(conndata_cmap_kd_stp2)),]
     rm(miss_mat)
     #CMap oe
     conndata_cmap_oe=conndata_cmap[grepl('_oe', rownames(conndata_cmap)),]; rownames(conndata_cmap_oe)=gsub('_oe','',rownames(conndata_cmap_oe))
@@ -522,7 +522,7 @@ multi_heatmaps_SwissCMapILINCS=function(swisstargetDir='swisstarget', iLINCSconn
     conndata_cmap_oe=rbind(conndata_cmap_oe,miss_mat)
     conndata_cmap_oe=conndata_cmap_oe[order(rownames(conndata_cmap_oe)),]
     conndata_cmap_oe_stp2=conndata_cmap_oe[toupper(rownames(conndata_cmap_oe))%in%candygenes,]
-    conndata_cmap_oe_stp2=conndata_cmap_oe_stp[order(rownames(conndata_cmap_oe_stp)),]
+    conndata_cmap_oe_stp2=conndata_cmap_oe_stp2[order(rownames(conndata_cmap_oe_stp2)),]
   }else{conndata_cmap_kd_stp2=NULL;conndata_cmap_oe_stp2=NULL}
   
   #Confirm the colors for the representations (default: 'gray' for NAs, reds for SwissTargetPrediction, blues for iLINCS and CMap data)
